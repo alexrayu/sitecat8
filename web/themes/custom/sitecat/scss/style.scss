@@ -1,0 +1,12 @@
+// Base-theme overrides.
+@import 'overrides/**/*';
+
+// Import styles
+@import 'reset/**/*';
+@import 'variable/**/*';
+@import 'abstraction/**/*';
+@import 'base/**/*';
+@import 'component/**/*';
+
+// Additional components
+@import 'themes/slate/**/*';

@@ -1,0 +1,75 @@
+<?php
+
+/**
+ * @file
+ * Bootstrap sub-theme.
+ *
+ * Place your custom PHP code in this file.
+ */
+
+use Drupal\Component\Utility\Html;
+
+/**
+ * Implmenets hook_preprocess_HOOK().
+ */
+function sitecat_preprocess_node(&$variables) {
+  $type = $variables['node']->getType();
+  $variables['attributes']['class'][] = 'node';
+  $variables['attributes']['class'][] = 'node--' . $type;
+
+  // Add some commonly used values.
+  $variables['timestamp'] = $variables['node']->created->value;
+
+  // Layouts have different addresses.
+  if (!empty($variables['content']['_field_layout'])) {
+    $content = &$variables['content']['_field_layout']['content'];
+  }
+  else {
+    $content = &$variables['content'];
+  }
+
+  // Gallery images - theme first gallery image.
+  if (!empty($content['field_gallery_images'][0])) {
+    $variables['gallery_image'] = render($content['field_gallery_images'][0]);
+  }
+}
+
+/**
+ * Implmenets hook_preprocess_HOOK().
+ */
+function sitecat_preprocess_page(&$variables) {
+  $variables['#attached']['library'][] = 'alibraries/magnific-popup';
+  $variables['#attached']['library'][] = 'alibraries/bxslider';
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function sitecat_form_alter(&$variables) {
+  $excluded_ids = ['search_block_form'];
+  if (!in_array($variables['#form_id'], $excluded_ids)) {
+    $variables['#attributes']['class'][] = 'ui-material';
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_page_alter().
+ */
+function sitecat_theme_suggestions_page_alter(array &$suggestions, array $variables, $hook) {
+  $node = Drupal::request()->attributes->get('node');
+  if (!empty($node) && $type = $node->bundle()) {
+    $suggestions[] = 'page__node__' . $type;
+    $suggestions[] = 'page__node__%' . $type;
+  }
+}
+
+/**
+ * Implmenets hook_preprocess_HOOK().
+ */
+function sitecat_preprocess_block(&$variables) {
+  // Create a valid HTML ID and make sure it is unique.
+  if (empty($variables['attributes']['id']) && !empty($variables['configuration']['label'])) {
+    $label = str_replace(' ', '', $variables['configuration']['label']);
+    $variables['attributes']['id'] = Html::getUniqueId('block-' . $label);
+  }
+}

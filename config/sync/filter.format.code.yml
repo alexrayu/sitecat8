@@ -1,0 +1,15 @@
+uuid: 60bd0c3f-0718-4c75-a1bd-416ef91ee72c
+langcode: en
+status: true
+dependencies: {  }
+name: Code
+format: code
+weight: -6
+filters:
+  filter_url:
+    id: filter_url
+    provider: filter
+    status: true
+    weight: 0
+    settings:
+      filter_url_length: 72

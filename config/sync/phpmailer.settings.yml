@@ -1,0 +1,19 @@
+smtp_on: 0
+smtp_host: localhost
+smtp_hostbackup: ''
+smtp_port: 25
+smtp_protocol: ''
+smtp_username: ''
+smtp_password: ''
+smtp_hide_password: 0
+smtp_fromname: ''
+smtp_always_replyto: 0
+smtp_keepalive: 0
+smtp_debug: 0
+smtp_debug_log: 0
+phpmailer_test: ''
+smtp_ssl_verify_peer: 1
+smtp_ssl_verify_peer_name: 1
+smtp_ssl_allow_self_signed: 0
+_core:
+  default_config_hash: 66xzFTgtayqHOpOiVRb4H0D2dzll41Uz0Y52ml7Z-Rs

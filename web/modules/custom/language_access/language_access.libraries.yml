@@ -1,0 +1,11 @@
+disable_langcode:
+  js:
+    js/disable_langcode.js: {}
+  dependencies:
+    - core/jquery
+allowed_languages_toolbar:
+  js:
+    js/allowed_langs.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupalSettings

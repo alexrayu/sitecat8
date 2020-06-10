@@ -1,0 +1,19 @@
+form .field--type-entity-reference-revisions {
+  .field-multiple-table {
+    .field-multiple-drag {
+      padding-top: 17px;
+    }
+    .paragraph-type-top {
+      border-top: 2px solid $clr-ui-storm;
+      margin-bottom: 10px;
+      .paragraph-type-title {
+        background: $clr-ui-storm;
+        color: #fff;
+        padding: 5px 10px;
+      }
+      .paragraphs-dropbutton-wrapper {
+        margin-top: 2px;
+      }
+    }
+  }
+}

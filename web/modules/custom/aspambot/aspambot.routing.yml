@@ -1,0 +1,9 @@
+
+aspambot.settings:
+  path: '/admin/config/system/aspambot'
+  defaults:
+    _form: '\Drupal\aspambot\Form\SettingsForm'
+    _title: 'A SpamBot Settings'
+  requirements:
+    _permission: 'administer aspambot'
+  

@@ -1,0 +1,20 @@
+uuid: b08e27f6-fe37-45f0-bef9-c877c49a5cc0
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - sitecat
+id: poweredbydrupal
+theme: sitecat
+region: footer_first
+weight: 0
+provider: null
+plugin: system_powered_by_block
+settings:
+  id: system_powered_by_block
+  label: 'Powered by Drupal'
+  provider: system
+  label_display: '0'
+visibility: {  }

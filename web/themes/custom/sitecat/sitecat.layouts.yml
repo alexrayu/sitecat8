@@ -1,0 +1,12 @@
+two_cols_50_50:
+  label: 'SiteCat: Two column 50/50'
+  category: 'SiteCat'
+  template: templates/layouts/two_cols_50_50
+  default_region: left
+  regions:
+    left:
+      label: Left
+    right:
+      label: Right
+  icon_map:
+    - [left, right]

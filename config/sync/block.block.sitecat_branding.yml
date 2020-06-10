@@ -1,0 +1,25 @@
+uuid: bd300c79-2804-4e9d-9d80-0c8486bd3a7c
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - sitecat
+_core:
+  default_config_hash: NDwadleLD3YVSbDUaakxyYZyINYtkFtOVGShfq4kWy8
+id: sitecat_branding
+theme: sitecat
+region: header
+weight: -6
+provider: null
+plugin: system_branding_block
+settings:
+  id: system_branding_block
+  label: 'Site branding'
+  provider: system
+  label_display: '0'
+  use_site_logo: true
+  use_site_name: true
+  use_site_slogan: true
+visibility: {  }

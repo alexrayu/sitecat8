@@ -1,0 +1,6 @@
+name: A SpamBot
+type: module
+description: A pretentious spam blocker.
+core: 8.x
+package: Custom
+configure: aspambot.settings

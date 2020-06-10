@@ -1,0 +1,20 @@
+.navbar-brand {
+  padding-right: 1em;
+  border-right: 1px solid #eee;
+  .site-name {
+    display: inline-block;
+    position: relative;
+    top: 7px;
+    font-size: 24px;
+    line-height: 24px;
+    padding-left: .5em;
+  }
+  img {
+    opacity: .85;
+  }
+  &:hover {
+    img {
+      opacity: 1;
+    }
+  }
+}

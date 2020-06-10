@@ -1,0 +1,29 @@
+@mixin notext {
+  font-size: 0;
+  text-indent: -99999px;
+}
+@mixin nofloat {
+  float: none;
+  clear: both;
+}
+@mixin content-middle {
+  position: relative;
+  top: 50%;
+  transform: translate(0, -50%);
+}
+@mixin content-center-middle {
+  position: relative;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+@mixin content-center {
+  position: relative;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+@mixin content-middle {
+  position: relative;
+  top: 50%;
+  transform: translate(0, -50%);
+}

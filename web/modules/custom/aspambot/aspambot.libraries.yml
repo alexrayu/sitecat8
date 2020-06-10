@@ -1,0 +1,17 @@
+aspambot:
+  css:
+    theme:
+      css/aspambot.css: {}
+  js:
+    js/aspambot.js: {}
+  dependencies:
+    - aspambot/multiselect
+
+multiselect:
+  css:
+    theme:
+      /libraries/jquery.multiselect/css/multi-select.dist.css: {}
+  js:
+    /libraries/jquery.multiselect/js/jquery.multi-select.js: {}
+  dependencies:
+    - core/jquery

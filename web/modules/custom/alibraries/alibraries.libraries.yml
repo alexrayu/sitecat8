@@ -1,0 +1,60 @@
+animate:
+  css:
+    theme:
+      /libraries/animate/animate.css: {}
+
+appear:
+  js:
+    /libraries/jquery.appear/jquery.appear.min.js: {}
+
+bxslider:
+  css:
+    theme:
+      /libraries/jquery.bxslider/jquery.bxslider.min.css: {}
+  js:
+    /libraries/jquery.bxslider/jquery.bxslider.min.js: {}
+
+cloudzoom:
+  css:
+    theme:
+      /libraries/cloud-zoom/cloud-zoom.css: {}
+  js:
+    /libraries/cloud-zoom/cloud-zoom.min.js: {}
+
+easing:
+  js:
+    /libraries/jquery.easing/jquery.easing.min.js: {}
+
+flexslider:
+  css:
+    theme:
+      /libraries/jquery.flexslider/flexslider.css: {}
+  js:
+    /libraries/jquery.flexslider/jquery.flexslider.min.js: {}
+
+gmap:
+  js:
+    /libraries/jquery.gmap/jquery.gmap.min.js: {}
+
+lazyload:
+  js:
+    /libraries/jquery.lazyload/jquery.lazyload.min.js: {}
+
+magnific-popup:
+  css:
+    theme:
+      /libraries/magnific-popup/magnific-popup.css: {}
+  js:
+    /libraries/magnific-popup/jquery.magnific-popup.min.js: {}
+
+matchheight:
+  js:
+    /libraries/jquery.matchheight/jquery.matchheight.min.js: {}
+
+shuffle:
+  js:
+    /libraries/shuffle/shuffle.min.js: {}
+
+youtube_api:
+  js:
+    https://www.youtube.com/iframe_api: {external: true}

@@ -1,0 +1,17 @@
+#block-cart {
+  .cart-block--summary__icon {
+    color: #333;
+  }
+  .cart-block--link__expand {
+    &:active,
+    &:focus {
+      background: #333;
+    }
+  }
+  .cart-block--contents {
+    background: #333;
+    a {
+      @include mui-button(#fff, #333);
+    }
+  }
+}

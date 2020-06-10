@@ -1,0 +1,6 @@
+track_enabled_base_fields: false
+local_task_enabled_entity_types:
+  - paragraphs_library_item
+_core:
+  default_config_hash: D0RcOA_aIiwSPXOZSHQOTm5FXzziEsJHdfXGaF4nhIQ
+usage_controller_items_per_page: 25

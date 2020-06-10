@@ -1,0 +1,22 @@
+uuid: 4954bc53-ea47-4df6-932d-c9825230f6ba
+langcode: en
+status: true
+dependencies:
+  module:
+    - help
+  theme:
+    - sitecat
+_core:
+  default_config_hash: 8I8iACSa0sKO3k3jlvUG1ge52rfcKX7USJAQYnzuBgg
+id: sitecat_help
+theme: sitecat
+region: content
+weight: -30
+provider: null
+plugin: help_block
+settings:
+  id: help_block
+  label: Help
+  provider: help
+  label_display: '0'
+visibility: {  }

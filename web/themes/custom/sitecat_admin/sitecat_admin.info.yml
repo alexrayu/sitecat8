@@ -1,0 +1,10 @@
+name: SiteCat Admin
+type: theme
+description: 'SiteCat admin theme extending Adminimal.'
+version: '8.x-2.2'
+core: '8.x'
+project: 'Sitecat Admin Theme'
+base theme: adminimal_theme
+
+libraries:
+  - sitecat_admin/style

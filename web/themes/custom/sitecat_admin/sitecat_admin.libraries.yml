@@ -1,0 +1,7 @@
+style:
+  version: VERSION
+  js:
+    assets/js/sitecat_admin.js: {}
+  css:
+    component:
+      assets/css/sitecat_admin.css: {}

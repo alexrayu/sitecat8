@@ -1,0 +1,885 @@
+<?php
+
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Entity\Entity;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Language\LanguageInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\language_access\LanguageAccessHelper;
+use Drupal\taxonomy\Entity\Term;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\views\ViewExecutable;
+use Drupal\views\Plugin\views\query\QueryPluginBase;
+
+/**
+ * Implements hook_form_alter().
+ *
+ * Performs language-related changes to various forms in the site.
+ * This mostly means limiting the language selections to those a user has
+ * access to.
+ */
+function language_access_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  /** @var \Drupal\language_access\LanguageAccessHelper $helper */
+  $helper = \Drupal::service('language_access.helper');
+
+  /*
+   * INSERT ENTITY
+   *
+   * Remove invalid languages.
+   */
+  if ($form_id === 'insert_entity_advanced_add_form' || $form_id === 'insert_entity_simple_add_form') {
+    if (isset($form['langcode'])) {
+      $user_languages = $helper->getLanguagesOfUser();
+      foreach ($form["langcode"]["widget"][0]["value"]["#options"] as $langcode => $language) {
+        if (!array_key_exists($langcode, $user_languages) && $langcode && !$helper->languageIsUndefined($langcode)) {
+          unset($form['langcode']['widget'][0]['value']['#options'][$langcode]);
+        }
+      }
+    }
+  }
+
+  /*
+   * FILE
+   */
+  if ($form_id === 'file_add' && isset($form['langcode'])) {
+    // Make sure we can access the language selection when adding files.
+    $form['langcode']['#access'] = TRUE;
+
+    // Add after build.
+    $form['#after_build'][] = 'language_access_after_build';
+  }
+
+  /*
+   * URL REDIRECT
+   */
+  if (in_array($form_id, [
+    'redirect_redirect_form',
+    'redirect_redirect_edit_form',
+  ], TRUE)) {
+    $form['#after_build'][] = 'language_access_redirect_form_after_build';
+  }
+
+  // Form ids for the edit nodes.
+  $allowed_edit_form_ids = [
+    'node_page_edit_form',
+    'node_article_edit_form',
+    'node_sidebar_edit_form',
+  ];
+
+  // Form ids for the creation of a node.
+  $allowed_create_form_ids = [
+    'node_page_form',
+    'node_article_form',
+    'node_sidebar_form',
+  ];
+
+  if (
+    in_array($form_id, $allowed_edit_form_ids, TRUE) ||
+    in_array($form_id, $allowed_create_form_ids, TRUE)
+  ) {
+    // Add after build function because langcode can only be altered there.
+    $form['#after_build'][] = 'language_access_after_build';
+
+    // Add library for disabling the langcode field if necessary.
+    $form['#attached']['library'][] = 'language_access/disable_langcode';
+  }
+
+  // True if editing a node.
+  if (in_array($form_id, $allowed_edit_form_ids, TRUE)) {
+    // Make sure the langcode and country fields are set.
+    if (isset($form['langcode'])) {
+      $form['langcode']['#disabled'] = TRUE;
+    }
+  }
+  // True if creating a node.
+  elseif (in_array($form_id, $allowed_create_form_ids, TRUE)) {
+    // Set the langcode from path prefix.
+    $language = \Drupal::languageManager()
+      ->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)
+      ->getId();
+
+    // Only if cloning...
+    $request = \Drupal::request();
+    $fieldclone = $request->get('fieldclone');
+    if (empty($fieldclone)) {
+      $form['langcode']['#disabled'] = TRUE;
+    }
+    else {
+      $form['langcode']['widget'][0]['value']['#default_value'] = $language;
+    }
+
+    // Check if we are not on a translation page.
+    $current_path = \Drupal::service('path.current')->getPath();
+    if (strpos($current_path, '/translations/add/')) {
+    }
+    else {
+      $form['langcode']['widget'][0]['value']['#default_value'] = $language;
+    }
+  }
+  // True for the content view.
+  elseif ($form['#id'] === 'views-exposed-form-content-page-1') {
+    $options = &$form['langcode']['#options'];
+    $flipped_options = array_flip($options);
+
+    // Update options.
+    $options = array_flip($flipped_options);
+  }
+  // True when editing an image or a file.
+  elseif ($form_id === 'file_image_edit_form' || $form_id === 'file_document_edit_form') {
+
+    // Unset topic options the current user doesn't have access to.
+    if (isset($form['field_file_article_topic']['widget']['#options'])) {
+      $form['field_file_article_topic']['widget']['#options'] = _language_access_unset_invalid_topic_options($form['field_file_article_topic']['widget']['#options']);
+    }
+  }
+}
+
+/**
+ * Implements hook_views_exposed_form_alter().
+ */
+function language_access_form_views_exposed_form_alter(&$form, FormStateInterface $form_state) {
+  if (isset($form['langcode'])) {
+    if (\Drupal::moduleHandler()->moduleExists('disable_language')) {
+      /** @var \Drupal\disable_language\DisableLanguageManager $manager */
+      $manager = \Drupal::service('disable_language.disable_language_manager');
+      $languages = $manager->getEnabledLanguages();
+    }
+    else {
+      $languages = \Drupal::languageManager()->getLanguages();
+    }
+
+    /** @var LanguageAccessHelper $helper */
+    $helper = \Drupal::service('language_access.helper');
+    $user_languages = $helper->getLanguagesOfUser();
+    $languages = array_intersect_key($user_languages, $languages);
+
+    $permitted = [
+      '***LANGUAGE_language_interface***',
+    ];
+
+    $options = &$form['langcode']['#options'];
+
+    unset($options['***LANGUAGE_site_default***']);
+    unset($options['***LANGUAGE_language_content***']);
+
+    if (isset($options['***LANGUAGE_language_interface***'])) {
+      $options['***LANGUAGE_language_interface***'] = t('- Current language -')->__toString();
+    }
+    foreach ($options as $key => $option) {
+      if (!array_key_exists($key, $languages) && !in_array($key, $permitted)) {
+        unset($options[$key]);
+      }
+    }
+  }
+
+}
+
+/**
+ * After build function.
+ *
+ * Unset invalid and disabled options in the language select list.
+ *
+ * @param array $form
+ *   Form.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   Form state.
+ *
+ * @return array
+ *   Return form.
+ */
+function language_access_after_build(array $form, FormStateInterface $form_state) {
+  $excluded_forms = [
+    'file_add',
+    'taxonomy_term_article_sources_form',
+    'taxonomy_term_article_tags_form',
+    'taxonomy_term_article_types_form',
+    'taxonomy_term_article_formats_form',
+    'taxonomy_term_article_internal_tags_form',
+    'taxonomy_term_article_topics_form',
+  ];
+
+  if (!in_array($form['#form_id'], $excluded_forms, TRUE)) {
+
+    // Make sure the description, weight and menu parent field are not visible.
+    // TODO: This doesn't belong here!!
+    if (isset($form['menu']['link'])) {
+      $form['menu']['link']['description']['#access'] = FALSE;
+      $form['menu']['link']['weight']['#access'] = FALSE;
+      $form['menu']['link']['menu_parent']['#access'] = FALSE;
+    }
+
+    // Make sure the langcode field is set.
+    if (isset($form['langcode'])) {
+
+      // Options for langcode field.
+      $form['langcode']['widget'][0]['value']['#options'];
+    }
+
+    // Form ids for the creation of a node.
+    $allowed_create_form_ids = [
+      'node_page_form',
+      'node_article_form',
+      'node_sidebar_form',
+    ];
+
+    if (in_array($form['#form_id'], $allowed_create_form_ids, TRUE)) {
+
+      // Check if we are no a translation page.
+      $current_path = \Drupal::service('path.current')->getPath();
+      if (strpos($current_path, '/translations/add/')) {
+
+        // Disable access to the source language field.
+        $form['source_langcode']['#access'] = FALSE;
+      }
+    }
+  }
+  else {
+    // Make sure the langcode field is set.
+    if (isset($form['langcode']) && $form['#form_id'] === 'file_add') {
+      // Options for langcode field.
+      $options = &$form['langcode']['widget'][0]['value']['#options'];
+      _language_access_unset_invalid_options($options);
+
+      // Unset topic options the current user doesn't have access to.
+      if (isset($form['field_file_article_topic']['widget']['#options'])) {
+        $form['field_file_article_topic']['widget']['#options'] = _language_access_unset_invalid_topic_options($form['field_file_article_topic']['widget']['#options']);
+      }
+    }
+  }
+
+  return $form;
+}
+
+/**
+ * Helper function.
+ *
+ * Unset topic options in a select list,
+ * which the current user doesn't have access to.
+ *
+ * @param array $topic_options
+ *   Topic options.
+ *
+ * @return array
+ *   Return topic options.
+ */
+function _language_access_unset_invalid_topic_options($topic_options) {
+
+  // Get helper class and current user.
+  $language_access_helper = \Drupal::service('language_access.helper');
+  $user = Drupal::currentUser();
+
+  // Unset all topics the current user doesn't have access to.
+  foreach ($topic_options as $tid => $topic_option) {
+    if (is_numeric($tid)) {
+      $topic_term = Term::load($tid);
+      if (!$language_access_helper->userHasAccessToLanguage($user, $topic_term->language())) {
+        unset($topic_options[$tid]);
+      }
+    }
+  }
+
+  return $topic_options;
+}
+
+/**
+ * Helper function to unset options which are not valid.
+ *
+ * @param array $options
+ *   Option list.
+ */
+function _language_access_unset_invalid_options(array &$options, $keep_languages = []) {
+  // Do not process if no options given.
+  if (!is_array($options)) {
+    return;
+  }
+
+  /** @var \Drupal\language_access\LanguageAccessHelper $helper */
+  $helper = \Drupal::service('language_access.helper');
+
+  $filtered_languages = $helper->getLanguagesOfUser(NULL, TRUE);
+
+  $options = array_intersect_key($options, $filtered_languages);
+}
+
+/**
+ * Language access permissions for the admin menu.
+ *
+ * @param array $perm_menus
+ *   Permission menu list.
+ * @param \Drupal\Core\Session\AccountInterface $account
+ *   User.
+ */
+function language_access_menu_admin_per_menu_get_permissions_alter(&$perm_menus, AccountInterface $account) {
+
+  // Get helper class.
+  $language_access_helper = \Drupal::service('language_access.helper');
+
+  // Check to perform only for menu admin routes.
+  $currentRoute = \Drupal::routeMatch()->getRouteName();
+
+  if ($currentRoute !== 'entity.menu.edit_form') {
+    return;
+  }
+
+  if ($account->id()) {
+    $language_prefixes = [];
+    $languages = $language_access_helper->getLanguagesOfUser($account);
+
+    // Walk over the countries.
+    foreach ($languages as $language_country) {
+
+      // Walk over the languages of this country.
+      foreach ($language_country as $language) {
+        $language_prefixes[] = $language->id();
+      }
+    }
+
+    foreach ($perm_menus as $key => $menu) {
+
+      // Check if we have a language prefix in the menu name.
+      if (preg_match('/--([a-z]{2}-[a-z]{2})/', $menu, $matches)) {
+
+        // Remove the complete-string match to only have the brace matches.
+        array_shift($matches);
+
+        // Check if the (first) brace match is in the allowed languages.
+        if (!\in_array(reset($matches), $language_prefixes, TRUE)) {
+          unset($perm_menus[$key]);
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Disables the menu link by default.
+ *
+ * @param \Drupal\Core\Entity\EntityInterface $entity
+ *   Entity.
+ */
+function language_access_entity_presave(EntityInterface $entity) {
+
+  // Checking for a menu link entity.
+  if ($entity->getEntityType()->id() === 'menu_link_content') {
+
+    // Make sure we are on a node.
+    $current_path = \Drupal::service('path.current')->getPath();
+    $item_status = $entity->get('enabled')->value;
+
+    if ($item_status !== '1' && preg_match('/\/node\//', $current_path)) {
+      // Disable by default.
+      $entity->get('enabled')->setValue('0');
+    }
+  }
+}
+
+/**
+ * Hook to alter the query of the entity browser view.
+ *
+ * @param \Drupal\views\ViewExecutable $view
+ *   View object.
+ * @param \Drupal\views\Plugin\views\query\QueryPluginBase $query
+ *   Query object.
+ */
+function language_access_views_query_alter(ViewExecutable $view, QueryPluginBase $query) {
+
+  // View ids the query alter should be applied to.
+  $allowed_view_ids = [
+    'files_entity_browser_single_image',
+    'files_entity_browser_multiple_images',
+    'files_entity_browser_documents',
+  ];
+
+  if (in_array($view->id(), $allowed_view_ids, TRUE)) {
+    $langcode = \Drupal::request()->get('langcode');
+    if (!empty($langcode)) {
+      $language_access_helper = \Drupal::service('language_access.helper');
+
+      // Get all languages of the langcode.
+      $languages = $language_access_helper->getFilteredLanguages();
+
+      // Add where group with or to add where conditions based on languages.
+      $query->setWhereGroup('OR', 2, 'where');
+      // Iterate through languages and add or-where condition for each langcode.
+      foreach ($languages as $language) {
+        $query->addWhere(2, 'file_managed.langcode', $language->getId(), 'LIKE');
+      }
+    }
+  }
+  elseif ($view->id() === 'content') {
+
+    // Get helper class.
+    $language_access_helper = \Drupal::service('language_access.helper');
+
+    // Only alter query if there is no custom filter active.
+    if (empty($query->where[1]['conditions'])) {
+
+      // Get all countries the current user has access to.
+      $allowed_languages = $language_access_helper->getLanguagesOfUser();
+
+      // Add where group with or to add where conditions based on languages.
+      $query->setWhereGroup('OR', 2, 'where');
+
+      // Iterate through all languages of the allowed country.
+      foreach ($allowed_languages as $allowed_language) {
+
+        // Make this language selected in the language filter.
+        $view->exposed_widgets['langcode']['#value'][$allowed_language->id()] = $allowed_language->id();
+
+        // Add or condition for this langcode to the above created where group.
+        $query->addWhere(2, 'node_field_data.langcode', $allowed_language->id(), 'LIKE');
+      }
+    }
+  }
+  elseif ($view->id() === 'redirect') {
+
+    // Get helper class.
+    $language_access_helper = \Drupal::service('language_access.helper');
+
+    // Only alter query if there is no custom filter active.
+    if (empty($query->where[1]['conditions'])) {
+      // Get all countries the current user has access to.
+      $allowed_languages = $language_access_helper->getLanguagesOfUser();
+      $language_keys = array_keys($language_access_helper->languagesToReadableArray($allowed_languages));
+
+      // Add where group with or to add where conditions based on languages.
+      $query->setWhereGroup('OR', 2, 'where');
+
+      // Iterate through all languages of the allowed country.
+      foreach ($allowed_languages as $allowed_language) {
+
+        // Add or condition for this langcode to the above created where group.
+        $query->addWhere(2, 'redirect.language', $allowed_language->id(), 'LIKE');
+      }
+
+      foreach ($view->exposed_widgets['language']['#options'] as $key => $option) {
+        if ($key !== 'All' && !\in_array($key, $language_keys, TRUE)) {
+          unset($view->exposed_widgets['language']['#options'][$key]);
+        }
+      }
+    }
+  }
+  elseif ($view->id() === 'file_entity_files_documents' || $view->id() === 'file_entity_files_images') {
+
+    // Get helper class.
+    $language_access_helper = \Drupal::service('language_access.helper');
+    if ($view->id() === 'file_entity_files_documents') {
+      $default_condition = [
+        '0' => [
+          'field' => 'file_managed.filemime',
+          'value' => '%image%',
+          'operator' => 'NOT LIKE',
+        ],
+        '1' => [
+          'field' => 'file_managed.filename',
+          'value' => '%article-stats-export%',
+          'operator' => 'NOT LIKE',
+        ],
+      ];
+    }
+    else {
+      $default_condition = [
+        '0' => [
+          'field' => 'file_managed.filemime',
+          'value' => '%image%',
+          'operator' => 'LIKE',
+        ],
+      ];
+    }
+
+    // Only alter query if there is no custom filter active.
+    if ($query->where[1]['conditions'] == $default_condition) {
+
+      // Get all countries the current user has access to.
+      $allowed_languages = $language_access_helper->getLanguagesOfUser();
+
+      // Add where group with or to add where conditions based on languages.
+      $query->setWhereGroup('OR', 2, 'where');
+
+      // Iterate through all languages of the allowed country.
+      foreach ($allowed_languages as $allowed_language) {
+
+        // Make this language selected in the language filter.
+        $view->exposed_widgets['langcode']['#value'][$allowed_language->id()] = $allowed_language->id();
+
+        // Add or condition for this langcode to the above created where group.
+        $query->addWhere(2, 'file_managed.langcode', $allowed_language->id(), 'LIKE');
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_menu_links_discovered_alter().
+ */
+function language_access_menu_links_discovered_alter(&$links) {
+  $moduleHandler = \Drupal::moduleHandler();
+  $languages = \Drupal::languageManager()->getNativeLanguages();
+
+  // Remove default language.
+  foreach ($languages as $key => $language) {
+    if (!empty($language) && $language->getId() === 'en') {
+      unset($languages[$key]);
+    }
+  }
+
+  // If there is only one language enabled, we don't need to proceed.
+  if (count($languages) <= 1) {
+    return;
+  }
+
+  if ($moduleHandler->moduleExists('node')) {
+
+    // Add node links for each content type.
+    foreach (node_type_get_names() as $machine_name => $label) {
+      // Check for content language options. We'll only add the translation
+      // links if the "Default language" options is set to "Interface text
+      // language selected for page".
+      $content_language_config = \Drupal::config('language.content_settings.node.' . $machine_name)
+        ->get('default_langcode');
+      if ($content_language_config === 'current_interface') {
+        // A weight option is necessary to keep the same weight as in Languages.
+        $weight = 0;
+        foreach ($languages as $prefix => $language) {
+          $links['node.add.' . $machine_name . '.' . $prefix] = [
+            'title' => $label . ' (' . $language->getName() . ')',
+            'route_name' => 'node.add',
+            'menu_name' => 'admin',
+            'parent' => 'node.add.' . $machine_name,
+            'route_parameters' => ['node_type' => $machine_name],
+            'options' => ['language' => $language],
+            'weight' => $weight,
+          ];
+          $weight++;
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Custom after build function.
+ *
+ * @param array $form
+ *   Form.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   Form state.
+ *
+ * @return array
+ *   Return form.
+ */
+function language_access_redirect_form_after_build($form, FormStateInterface $form_state) {
+
+  // Get helper class.
+  $language_access_helper = \Drupal::service('language_access.helper');
+
+  // Truncate list of permissible redirect statuses.
+  $form['status_code']['#options'] = [
+    301 => $form['status_code']['#options'][301],
+  ];
+  $form['status_code']['#value'] = '301';
+
+  // Fetch list of languages.
+  $languages = $language_access_helper->getLanguagesOfUser();
+
+  // Convert list of languages into something more readable.
+  $languages = $language_access_helper->languagesToReadableArray($languages);
+
+  // Only the keys are needed for what we're about to do.
+  $language_keys = array_keys($languages);
+
+  // Remove any languages not accessible to the current user.
+  foreach ($form['language']['widget'][0]['value']['#options'] as $option => $label) {
+    if (!in_array($option, $language_keys, TRUE)) {
+      unset($form['language']['widget'][0]['value']['#options'][$option]);
+    }
+  }
+
+  if ($form['#form_id'] === 'redirect_redirect_form') {
+
+    // Set default language value to current locale.
+    $locale = $language_access_helper->getLangcodeFromRequest();
+    if (isset($form['language']['widget'][0]['value']['#options'][$locale])) {
+      $form['language']['widget'][0]['value']['#default_value'] = $locale;
+      $form['language']['widget'][0]['value']['#value'] = $locale;
+    }
+  }
+
+  return $form;
+}
+
+/**
+ * Pre process menu-toolbar due to language accessibility.
+ *
+ * @param array $variables
+ *   The template variables.
+ */
+function language_access_preprocess_menu__toolbar(array &$variables) {
+
+  // Get helper class.
+  /** @var \Drupal\language_access\LanguageAccessHelper $language_access_helper */
+  $language_access_helper = \Drupal::service('language_access.helper');
+
+  // Get all languages and the current logged in user.
+  $user = Drupal::currentUser();
+  $languages = \Drupal::languageManager()->getNativeLanguages();
+  $langs_to_unset = [];
+
+  // Iterate and check language access.
+  foreach ($languages as $key => $language) {
+    $has_access = $language_access_helper->userHasAccessToLanguage($user, $language);
+
+    // If no access, write the language id into array.
+    if (!$has_access && $language->getId() !== 'en') {
+      $langs_to_unset[] = $language->getId();
+    }
+  }
+
+  // Get the not allowed languages array into drupalSettings.
+  $variables['#attached']['drupalSettings']['language_access']['langs_to_unset'] = $langs_to_unset;
+
+  // Add library for unsetting language from toolbar.
+  $variables['#attached']['library'][] = 'language_access/allowed_languages_toolbar';
+}
+
+/**
+ * Validation.
+ *
+ * Assure you can't add two terms of the same name and langcode.
+ *
+ * @param array $form
+ *   Form.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   Form state.
+ */
+function language_access_validate_term_duplicate($form, FormStateInterface $form_state) {
+
+  // Get the current entity to filter in case this is an edit.
+  $entity_id = $form_state->getFormObject()->getEntity()->id();
+
+  // Get name and langcode of term the user wants to add.
+  $term_name = $form['name']['widget'][0]['value']['#value'];
+  $term_langcode = $form['langcode']['widget'][0]['value']['#value'];
+
+  // Look for an existing term with this name and langcode.
+  $term_id_query = Drupal::entityQuery('taxonomy_term')
+    ->condition('vid', $form['vid']['#value'])
+    ->condition('name', $term_name)
+    ->condition('langcode', $term_langcode);
+  if ($entity_id) {
+    $term_id_query->condition('tid', $entity_id, '<>');
+  }
+
+  $term_id = $term_id_query->execute();
+
+  // If an term with this name and langcode is existing set an error.
+  if (!empty($term_id)) {
+    $form_state->setError($form['langcode']['widget'][0], t('A term for this vocabulary with this name and langcode already exists.'));
+  }
+}
+
+/**
+ * Implements hook_views_data_alter().
+ *
+ * {@inheritdoc}
+ */
+function language_access_views_data_alter(array &$data) {
+  $data['redirect_404']['user_countries'] = [
+    'title' => t('User Countries Access'),
+    'filter' => [
+      'title' => t('User Countries Access'),
+      'help' => t('Limit to the countries assigned to the user.'),
+      'id' => 'access_user_countries',
+    ],
+  ];
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_access().
+ */
+function language_access_node_access(EntityInterface $entity, $operation, AccountInterface $account) {
+  if ($operation === 'update' || $operation === 'delete' || $operation === 'clone' || $operation === 'translate') {
+    /** @var LanguageAccessHelper $helper */
+    $helper = \Drupal::service('language_access.helper');
+    $language = $entity->language()->getId();
+    if (!$helper->userHasAccessToLanguage($account, $language)) {
+      return AccessResult::forbidden();
+    }
+  }
+
+  // No opinion.
+  return AccessResult::neutral();
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_access().
+ */
+function language_taxonomy_term_access(EntityInterface $entity, $operation, AccountInterface $account) {
+  if ($operation === 'update' || $operation === 'delete' || $operation === 'clone' || $operation === 'translate') {
+    /** @var LanguageAccessHelper $language_access_helper */
+    $language_access_helper = \Drupal::service('language_access.helper');
+    $language = $entity->language()->getId();
+    if (!$language_access_helper->userHasAccessToLanguage($account, $language) && !$language_access_helper->languageIsUndefined($language)) {
+      return AccessResult::forbidden();
+    }
+  }
+
+  // No opinion.
+  return AccessResult::neutral();
+}
+
+/**
+ * Removes translation links if not allowed to show to user.
+ *
+ * @param array $operations
+ *   Operations list.
+ * @param \Drupal\Core\Entity\EntityInterface $entity
+ *   Entity object.
+ */
+function language_access_entity_operation_alter(array &$operations, EntityInterface $entity) {
+
+  // On content overview that only works if caching is disabled.
+  if ($entity->getEntityType()->id() === 'node') {
+
+    // Get helper class.
+    $language_access_helper = \Drupal::service('language_access.helper');
+
+    // Check if we allow translations.
+    $langcode = $entity->language()->getId();
+    $current_site = $language_access_helper->getSiteFromLangcode($langcode);
+
+    // Get the current user.
+    $user = \Drupal::currentUser();
+    $user_roles = $user->getRoles();
+
+    // Do not show translate link to non admins if content misses language.
+    if ($current_site == FALSE && isset($operations['translate']) && !\in_array('administrator', $user_roles, TRUE)) {
+      unset($operations['translate']);
+    }
+
+    // Do not allow actions if user is not allowed to edit entity.
+    if (!$language_access_helper->userHasAccessToLanguage($user, $langcode)) {
+      // todo: #access, instead of unset.
+      unset($operations['translate'], $operations['edit'], $operations['delete'], $operations['clone']);
+    }
+  }
+}
+
+/**
+ * Implements hook_field_widget_form_alter().
+ */
+function language_access_field_widget_form_alter(&$element, FormStateInterface $form_state, $context) {
+  /** @var \Drupal\Core\Field\FieldItemListInterface $items */
+  $items = $context['items'];
+  $definition = $items->getFieldDefinition();
+
+  // Filter the list of languages in the user edit form.
+  if ($definition->getTargetBundle() === 'user' && $definition->getName() === 'field_language') {
+    /** @var \Drupal\language_access\LanguageAccessHelper $helper */
+    $helper = \Drupal::service('language_access.helper');
+    $filtered_languages = $helper->getFilteredLanguages();
+    $element['#options'] = array_intersect_key($element['#options'], $filtered_languages);
+  }
+
+  // todo: /admin/structure/insert_entity/add/advanced
+  if ($definition->getType() === 'language' && isset($element['value']['#options'])) {
+    /** @var \Drupal\language_access\LanguageAccessHelper $helper */
+    $helper = \Drupal::service('language_access.helper');
+    $filtered_languages = $helper->getFilteredLanguages();
+    $element['value']['#options'] = $filtered_languages;
+  }
+}
+
+/**
+ * Generic helper that filters options of selects that reference other entities.
+ *
+ * @param $form
+ * @param $form_state
+ *
+ * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+ * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+ */
+function _filter_selects_by_language(&$form, $form_state) {
+  $langcode = \Drupal::languageManager()
+    ->getCurrentLanguage(LanguageInterface::TYPE_CONTENT)
+    ->getId();
+
+  $form_ids = explode('_', $form['#form_id']);
+  $entity = $form_ids[0];
+  $bundle = $form_ids[1];
+
+  // Special handling for taxonomy_terms ...
+  if ($entity === 'taxonomy') {
+    $entity = 'taxonomy_term';
+    if (($p = array_search('taxonomy', $form_ids)) !== FALSE) {
+      unset($form_ids[$p]);
+    }
+    if (($p = array_search('term', $form_ids)) !== FALSE) {
+      unset($form_ids[$p]);
+    }
+    if (($p = array_search('form', $form_ids)) !== FALSE) {
+      unset($form_ids[$p]);
+    }
+    $bundle = implode('_', $form_ids);
+  }
+
+  $fields = \Drupal::entityManager()
+    ->getFieldDefinitions($entity, $bundle);
+
+  // Iterate over all form elements.
+  foreach ($form as $key => $element) {
+
+    // Go on only for selects.
+    if (is_array($element) && isset($element["widget"]["#type"]) && $element["widget"]["#type"] === 'select') {
+
+      // That reference other entities.
+      if ($element["widget"]["#key_column"] === 'target_id') {
+
+        $field_name = $element["widget"]["#field_name"];
+
+        // If the field really exists and if of type entity_reference.
+        if (array_key_exists($field_name, $fields) && $fields[$field_name]->getType() === 'entity_reference') {
+          /** @var \Drupal\field\Entity\FieldConfig $fieldconfig */
+          $fieldconfig = $fields[$field_name];
+          $reference_entity_type = $fieldconfig->getFieldStorageDefinition()
+            ->get('settings')['target_type'];
+
+          // Iterate over the select options, by loading entities and checking their languages.
+          foreach ($form[$field_name]["widget"]["#options"] as $k => $option) {
+
+            $entity = \Drupal::entityTypeManager()
+              ->getStorage($reference_entity_type)
+              ->load($k);
+            if ($entity instanceof Entity && $entity->language()
+                ->getId() !== $langcode && $entity->language()
+                ->getId() !== '- None -') {
+              // Finally unset/remove not valid options.
+              unset($form[$field_name]['widget']['#options'][$k]);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_language_fallback_candidates_OPERATION_alter().
+ */
+function language_access_language_fallback_candidates_locale_lookup_alter(array &$candidates, array $context) {
+  /** @var \Drupal\Core\Language\LanguageManagerInterface $languageManager */
+  $languageManager = \Drupal::service('language_manager');
+  $languages = $languageManager->getLanguages(LanguageInterface::STATE_ALL);
+
+  // If current langcode starts with de- add string translation fallback.
+  // todo: Check if that may be changed by user/role.
+  $parts = explode('-', $context['langcode']);
+  if (array_key_exists($parts[0], $languages)) {
+    $candidates = array_merge([$parts[0]], $candidates);
+  }
+
+  // Force english for Super-Admin.
+  if (\Drupal::currentUser()->id() === "1") {
+    $candidates = ['en'];
+  }
+}
