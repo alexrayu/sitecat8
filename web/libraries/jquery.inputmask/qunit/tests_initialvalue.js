@@ -1,3 +1,5 @@
+import keyCode from "../lib/keycode";
+
 export default function (qunit, Inputmask) {
     var $ = Inputmask.dependencyLib;
 
@@ -121,14 +123,14 @@ export default function (qunit, Inputmask) {
         Inputmask("6703 9999 9999 9999 9").mask(testmask);
         testmask.focus();
         $("#testmask").Type("1234567890123");
-        $("#testmask").SendKey(Inputmask.keyCode.BACKSPACE);
+        $("#testmask").SendKey(keyCode.BACKSPACE);
 
         assert.equal(testmask.value, "6703 1234 5678 9012 _", "Result " + testmask.value);
     });
 
     qunit.test("inputmask(\"6703 9999 9999 9999 9\") ~ type \"6703670367036\" + backspace - FransVdb", function (assert) {
         var done = assert.async(),
-            $fixture = $("#qunit-fixture");
+        $fixture = $("#qunit-fixture");
         $fixture.append('<input type="text" id="testmask" />');
         var testmask = document.getElementById("testmask");
         Inputmask("6703 9999 9999 9999 9").mask(testmask);
@@ -136,9 +138,133 @@ export default function (qunit, Inputmask) {
         $("#testmask").trigger("click");
         setTimeout(function () {
             $("#testmask").Type("6703670367036");
-            $("#testmask").SendKey(Inputmask.keyCode.BACKSPACE);
+            $("#testmask").SendKey(keyCode.BACKSPACE);
             assert.equal(testmask.value, "6703 6703 6703 6703 _", "Result " + testmask.value);
             done();
         }, 0);
+    });
+
+    qunit.test("f\\\\acebook.com/&{0,20} value=\"event\"", function (assert) {
+        var $fixture = $("#qunit-fixture");
+        $fixture.append('<input type="text" id="testmask" value="event" />');
+        var testmask = document.getElementById("testmask");
+        Inputmask(
+            {mask:'f\\acebook.com/&{0,20}'}
+        ).mask(testmask);
+
+        assert.equal(testmask.value, "facebook.com/EVENT", "Result " + testmask.value);
+    });
+    qunit.test("f\\\\acebook.com/&{0,20} value=\"event\"", function (assert) {
+        var $fixture = $("#qunit-fixture");
+        $fixture.append('<input type="text" id="testmask" value="facebook.com/EVENT" />');
+        var testmask = document.getElementById("testmask");
+        Inputmask(
+            {mask:'f\\acebook.com/&{0,20}'}
+        ).mask(testmask);
+
+        assert.equal(testmask.value, "facebook.com/EVENT", "Result " + testmask.value);
+    });
+
+    qunit.test("f\\\\acebook.com/&{0,20} value=\"facet\"", function (assert) {
+        var $fixture = $("#qunit-fixture");
+        $fixture.append('<input type="text" id="testmask" value="facet" />');
+        var testmask = document.getElementById("testmask");
+        Inputmask(
+            {mask:'f\\acebook.com/&{0,20}'}
+        ).mask(testmask);
+
+        assert.equal(testmask.value, "facebook.com/FACET", "Result " + testmask.value);
+    });
+    qunit.test("f\\\\acebook.com/&{0,20} value=\"facebook.com/facet\"", function (assert) {
+        var $fixture = $("#qunit-fixture");
+        $fixture.append('<input type="text" id="testmask" value="facebook.com/facet" />');
+        var testmask = document.getElementById("testmask");
+        Inputmask(
+            {mask:'f\\acebook.com/&{0,20}'}
+        ).mask(testmask);
+
+        assert.equal(testmask.value, "facebook.com/FACET", "Result " + testmask.value);
+    });
+
+    qunit.test("test prefilled value input with positionOnCaret: select", function (assert) {
+        var done = assert.async(),
+        $fixture = $("#qunit-fixture");
+        $fixture.append('<input type="text" id="testmask" value="8.00" />');
+        var testmask = document.getElementById("testmask");
+        Inputmask("decimal", {
+            positionCaretOnClick: 'select'
+        }).mask(testmask);
+        setTimeout(function () {
+            assert.equal(testmask.value, "8.00", "Result " + testmask.value);
+            done();
+        }, 5);
+    });
+
+    qunit.test("test prefilled value input with positionOnCaret: none", function (assert) {
+        var done = assert.async(),
+        $fixture = $("#qunit-fixture");
+        $fixture.append('<input type="text" id="testmask" value="8.00" />');
+        var testmask = document.getElementById("testmask");
+        Inputmask("decimal", {
+            positionCaretOnClick: 'none'
+        }).mask(testmask);
+        setTimeout(function () {
+            assert.equal(testmask.value, "8.00", "Result " + testmask.value);
+            done();
+        }, 5);
+    });
+
+    qunit.test("test prefilled value input with positionOnCaret: lvp", function (assert) {
+        var done = assert.async(),
+        $fixture = $("#qunit-fixture");
+        $fixture.append('<input type="text" id="testmask" value="8.00" />');
+        var testmask = document.getElementById("testmask");
+        Inputmask("decimal", {
+            positionCaretOnClick: 'lvp'
+        }).mask(testmask);
+        setTimeout(function () {
+            assert.equal(testmask.value, "8.00", "Result " + testmask.value);
+            done();
+        }, 5);
+    });
+
+    qunit.test("test prefilled value input with positionOnCaret: ignore", function (assert) {
+        var done = assert.async(),
+        $fixture = $("#qunit-fixture");
+        $fixture.append('<input type="text" id="testmask" value="8.00" />');
+        var testmask = document.getElementById("testmask");
+        Inputmask("decimal", {
+            positionCaretOnClick: 'ignore'
+        }).mask(testmask);
+        setTimeout(function () {
+            assert.equal(testmask.value, "8.00", "Result " + testmask.value);
+            done();
+        }, 5);
+    });
+
+    qunit.test("test prefilled value input with positionOnCaret: radixFocus", function (assert) {
+        var done = assert.async(),
+        $fixture = $("#qunit-fixture");
+        $fixture.append('<input type="text" id="testmask" value="8.00" />');
+        var testmask = document.getElementById("testmask");
+        Inputmask("decimal", {
+            positionCaretOnClick: 'radixFocus'
+        }).mask(testmask);
+        setTimeout(function () {
+            assert.equal(testmask.value, "8.00", "Result " + testmask.value);
+            done();
+        }, 5);
+    });
+
+    qunit.test("test prefilled value input without positionOnCaret", function (assert) {
+        var done = assert.async(),
+        $fixture = $("#qunit-fixture");
+        $fixture.append('<input type="text" id="testmask" value="8.00" />');
+        var testmask = document.getElementById("testmask");
+        Inputmask("decimal").mask(testmask);
+        setTimeout(function () {
+            assert.equal(testmask.value, "8.00", "Result " + testmask.value);
+            done();
+        }, 5);
     });
 };

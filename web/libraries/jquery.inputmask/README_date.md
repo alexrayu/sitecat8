@@ -16,7 +16,7 @@ ex:
 - mm/dd/yyyy  
 - dd.mm.yyyy HH:MM:ss  
 
-###Supported symbols
+### Supported symbols
 - d  
 Day of the month as digits; no leading zero for single-digit days.
 - dd  
@@ -33,7 +33,7 @@ Month as digits; leading zero for single-digit months.
 Month as a three-letter abbreviation.
 - mmmm  
 Month as its full name.
--yy  
+- yy  
 Year as last two digits; leading zero for years less than 10.
 - yyyy  
 Year as 4 digits.
@@ -41,14 +41,14 @@ Year as 4 digits.
 Hours; no leading zero for single-digit hours (12-hour clock).
 - hh  
 Hours; leading zero for single-digit hours (12-hour clock).
-- hhh  
-Hours; no limit
+- hx  
+Hours; no limit; x = number of digits ~ use as h2, h3, ...   
 -H  
 Hours; no leading zero for single-digit hours (24-hour clock).
 - HH  
 Hours; leading zero for single-digit hours (24-hour clock).
-- HHH  
-Hours; no limit
+- Hx  
+Hours; no limit; x = number of digits ~ use as H2, H3, ...   
 - M  
 Minutes; no leading zero for single-digit minutes. Uppercase M unlike CF timeFormat's m to avoid conflict with months.
 - MM  
@@ -88,6 +88,6 @@ Visual format when the input looses focus
 ## outputFormat
 Unmasking format
 ## min
-Minimum value. This needs to be in the same format as the inputfornat
+Minimum value. This needs to be in the same format as the inputformat
 ## max
-Maximum value. This needs to be in the same format as the inputfornat,
+Maximum value. This needs to be in the same format as the inputformat,

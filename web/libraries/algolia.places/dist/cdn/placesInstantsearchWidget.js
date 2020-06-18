@@ -1,4 +1,4 @@
-/*!  1.15.0 | © Algolia | github.com/algolia/places */
+/*!  1.18.2 | © Algolia | github.com/algolia/places */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -92,7 +92,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 79);
+/******/ 	return __webpack_require__(__webpack_require__.s = 72);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -166,9 +166,8 @@ module.exports = {
       return result;
     }
     this.each(obj, function(val, key) {
-      result = test.call(null, val, key, obj);
-      if (!result) {
-        return false;
+      if (result) {
+        result = test.call(null, val, key, obj) && result;
       }
     });
     return !!result;
@@ -239,12 +238,15 @@ module.exports = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 var extractParams = function extractParams(_ref) {
   var hitsPerPage = _ref.hitsPerPage,
+      postcodeSearch = _ref.postcodeSearch,
       aroundLatLng = _ref.aroundLatLng,
       aroundRadius = _ref.aroundRadius,
       aroundLatLngViaIP = _ref.aroundLatLngViaIP,
@@ -277,7 +279,11 @@ var extractParams = function extractParams(_ref) {
     extracted.aroundLatLngViaIP = aroundLatLngViaIP;
   }
 
-  return Object.assign(extracted, {
+  if (postcodeSearch) {
+    extracted.restrictSearchableAttributes = 'postcode';
+  }
+
+  return _objectSpread({}, extracted, {
     aroundRadius: aroundRadius,
     insideBoundingBox: insideBoundingBox,
     insidePolygon: insidePolygon,
@@ -299,14 +305,16 @@ var extractControls = function extractControls(_ref2) {
       onError = _ref2$onError === void 0 ? function (e) {
     throw e;
   } : _ref2$onError,
-      onRateLimitReached = _ref2.onRateLimitReached;
+      onRateLimitReached = _ref2.onRateLimitReached,
+      onInvalidCredentials = _ref2.onInvalidCredentials;
   return {
     useDeviceLocation: useDeviceLocation,
     computeQueryParams: computeQueryParams,
     formatInputValue: formatInputValue,
     onHits: onHits,
     onError: onError,
-    onRateLimitReached: onRateLimitReached
+    onRateLimitReached: onRateLimitReached,
+    onInvalidCredentials: onInvalidCredentials
   };
 };
 
@@ -314,8 +322,8 @@ var params = {};
 var controls = {};
 
 var configure = function configure(configuration) {
-  params = extractParams(_objectSpread({}, params, configuration));
-  controls = extractControls(_objectSpread({}, controls, configuration));
+  params = extractParams(_objectSpread({}, params, {}, configuration));
+  controls = extractControls(_objectSpread({}, controls, {}, configuration));
   return {
     params: params,
     controls: controls
@@ -405,13 +413,14 @@ module.exports = g;
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ('1.15.0');
+/* harmony default export */ __webpack_exports__["default"] = ('1.18.2');
 
 /***/ }),
 /* 7 */
-/***/ (function(module, exports) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 14 20\"><path d=\"M7 0C3.13 0 0 3.13 0 7c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5C5.62 9.5 4.5 8.38 4.5 7S5.62 4.5 7 4.5 9.5 5.62 9.5 7 8.38 9.5 7 9.5z\"/></svg>\n"
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = ("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 14 20\"><path d=\"M7 0C3.13 0 0 3.13 0 7c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5C5.62 9.5 4.5 8.38 4.5 7S5.62 4.5 7 4.5 9.5 5.62 9.5 7 8.38 9.5 7 9.5z\"/></svg>\n");
 
 /***/ }),
 /* 8 */
@@ -431,32 +440,19 @@ function formatInputValue(_ref) {
 }
 // EXTERNAL MODULE: ./src/icons/address.svg
 var address = __webpack_require__(7);
-var address_default = /*#__PURE__*/__webpack_require__.n(address);
 
-// EXTERNAL MODULE: ./src/icons/city.svg
-var city = __webpack_require__(15);
-var city_default = /*#__PURE__*/__webpack_require__.n(city);
-
-// EXTERNAL MODULE: ./src/icons/country.svg
-var country = __webpack_require__(16);
-var country_default = /*#__PURE__*/__webpack_require__.n(country);
-
-// EXTERNAL MODULE: ./src/icons/bus.svg
-var bus = __webpack_require__(17);
-var bus_default = /*#__PURE__*/__webpack_require__.n(bus);
-
-// EXTERNAL MODULE: ./src/icons/train.svg
-var train = __webpack_require__(18);
-var train_default = /*#__PURE__*/__webpack_require__.n(train);
-
-// EXTERNAL MODULE: ./src/icons/townhall.svg
-var townhall = __webpack_require__(19);
-var townhall_default = /*#__PURE__*/__webpack_require__.n(townhall);
-
-// EXTERNAL MODULE: ./src/icons/plane.svg
-var plane = __webpack_require__(20);
-var plane_default = /*#__PURE__*/__webpack_require__.n(plane);
-
+// CONCATENATED MODULE: ./src/icons/city.svg
+/* harmony default export */ var city = ("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 18 19\"><path d=\"M12 9V3L9 0 6 3v2H0v14h18V9h-6zm-8 8H2v-2h2v2zm0-4H2v-2h2v2zm0-4H2V7h2v2zm6 8H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V7h2v2zm0-4H8V3h2v2zm6 12h-2v-2h2v2zm0-4h-2v-2h2v2z\"/></svg>\n");
+// CONCATENATED MODULE: ./src/icons/country.svg
+/* harmony default export */ var country = ("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 20 20\">\n  <path d=\"M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zM9 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L7 13v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H6V8h2c.55 0 1-.45 1-1V5h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z\"/>\n</svg>\n");
+// CONCATENATED MODULE: ./src/icons/bus.svg
+/* harmony default export */ var bus = ("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 54.9 50.5\"><path d=\"M9.6 12.7H8.5c-2.3 0-4.1 1.9-4.1 4.1v1.1c0 2.2 1.8 4 4 4.1v21.7h-.7c-1.3 0-2.3 1-2.3 2.3h7.1c0-1.3-1-2.3-2.3-2.3h-.5V22.1c2.2-.1 4-1.9 4-4.1v-1.1c0-2.3-1.8-4.2-4.1-4.2zM46 7.6h-7.5c0-1.8-1.5-3.3-3.3-3.3h-3.6c-1.8 0-3.3 1.5-3.3 3.3H21c-2.5 0-4.6 2-4.6 4.6v26.3c0 1.7 1.3 3.1 3 3.1h.8v1.6c0 1.7 1.4 3.1 3.1 3.1 1.7 0 3-1.4 3-3.1v-1.6h14.3v1.6c0 1.7 1.4 3.1 3.1 3.1 1.7 0 3.1-1.4 3.1-3.1v-1.6h.8c1.7 0 3.1-1.4 3.1-3.1V12.2c-.2-2.5-2.2-4.6-4.7-4.6zm-27.4 4.6c0-1.3 1.1-2.4 2.4-2.4h25c1.3 0 2.4 1.1 2.4 2.4v.3c0 1.3-1.1 2.4-2.4 2.4H21c-1.3 0-2.4-1.1-2.4-2.4v-.3zM21 38c-1.5 0-2.7-1.2-2.7-2.7 0-1.5 1.2-2.7 2.7-2.7 1.5 0 2.7 1.2 2.7 2.7 0 1.5-1.2 2.7-2.7 2.7zm0-10.1c-1.3 0-2.4-1.1-2.4-2.4v-6.6c0-1.3 1.1-2.4 2.4-2.4h25c1.3 0 2.4 1.1 2.4 2.4v6.6c0 1.3-1.1 2.4-2.4 2.4H21zm24.8 10c-1.5 0-2.7-1.2-2.7-2.7 0-1.5 1.2-2.7 2.7-2.7 1.5 0 2.7 1.2 2.7 2.7 0 1.5-1.2 2.7-2.7 2.7z\"/></svg>\n");
+// CONCATENATED MODULE: ./src/icons/train.svg
+/* harmony default export */ var train = ("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 15 20\">\n  <path d=\"M13.105 20l-2.366-3.354H4.26L1.907 20H0l3.297-4.787c-1.1-.177-2.196-1.287-2.194-2.642V2.68C1.1 1.28 2.317-.002 3.973 0h7.065c1.647-.002 2.863 1.28 2.86 2.676v9.895c.003 1.36-1.094 2.47-2.194 2.647L15 20h-1.895zM6.11 2h2.78c.264 0 .472-.123.472-.27v-.46c0-.147-.22-.268-.472-.27H6.11c-.252.002-.47.123-.47.27v.46c0 .146.206.27.47.27zm6.26 3.952V4.175c-.004-.74-.5-1.387-1.436-1.388H4.066c-.936 0-1.43.648-1.436 1.388v1.777c-.002.86.644 1.384 1.436 1.388h6.868c.793-.004 1.44-.528 1.436-1.388zm-8.465 5.386c-.69-.003-1.254.54-1.252 1.21-.002.673.56 1.217 1.252 1.222.697-.006 1.26-.55 1.262-1.22-.002-.672-.565-1.215-1.262-1.212zm8.42 1.21c-.005-.67-.567-1.213-1.265-1.21-.69-.003-1.253.54-1.25 1.21-.003.673.56 1.217 1.25 1.222.698-.006 1.26-.55 1.264-1.22z\"/>\n</svg>\n");
+// CONCATENATED MODULE: ./src/icons/townhall.svg
+/* harmony default export */ var townhall = ("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\"><path d=\"M12 .6L2.5 6.9h18.9L12 .6zM3.8 8.2c-.7 0-1.3.6-1.3 1.3v8.8L.3 22.1c-.2.3-.3.5-.3.6 0 .6.8.6 1.3.6h21.5c.4 0 1.3 0 1.3-.6 0-.2-.1-.3-.3-.6l-2.2-3.8V9.5c0-.7-.6-1.3-1.3-1.3H3.8zm2.5 2.5c.7 0 1.1.6 1.3 1.3v7.6H5.1V12c0-.7.5-1.3 1.2-1.3zm5.7 0c.7 0 1.3.6 1.3 1.3v7.6h-2.5V12c-.1-.7.5-1.3 1.2-1.3zm5.7 0c.7 0 1.3.6 1.3 1.3v7.6h-2.5V12c-.1-.7.5-1.3 1.2-1.3z\"/></svg>\n");
+// CONCATENATED MODULE: ./src/icons/plane.svg
+/* harmony default export */ var plane = ("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\"><path d=\"M22.9 1.1s1.3.3-4.3 6.5l.7 3.8.2-.2c.4-.4 1-.4 1.3 0 .4.4.4 1 0 1.3l-1.2 1.2.3 1.7.1-.1c.4-.4 1-.4 1.3 0 .4.4.4 1 0 1.3l-1.1 1.1c.2 1.9.3 3.6.1 4.5 0 0-1.2 1.2-1.8.5 0 0-2.3-7.7-3.8-11.1-5.9 6-6.4 5.6-6.4 5.6s1.2 3.8-.2 5.2l-2.3-4.3h.1l-4.3-2.3c1.3-1.3 5.2-.2 5.2-.2s-.5-.4 5.6-6.3C8.9 7.7 1.2 5.5 1.2 5.5c-.7-.7.5-1.8.5-1.8.9-.2 2.6-.1 4.5.1l1.1-1.1c.4-.4 1-.4 1.3 0 .4.4.4 1 0 1.3l1.7.3 1.2-1.2c.4-.4 1-.4 1.3 0 .4.4.4 1 0 1.3l-.2.2 3.8.7c6.2-5.5 6.5-4.2 6.5-4.2z\"/></svg>\n");
 // CONCATENATED MODULE: ./src/formatDropdownValue.js
 
 
@@ -466,13 +462,13 @@ var plane_default = /*#__PURE__*/__webpack_require__.n(plane);
 
 
 var icons = {
-  address: address_default.a,
-  city: city_default.a,
-  country: country_default.a,
-  busStop: bus_default.a,
-  trainStation: train_default.a,
-  townhall: townhall_default.a,
-  airport: plane_default.a
+  address: address["a" /* default */],
+  city: city,
+  country: country,
+  busStop: bus,
+  trainStation: train,
+  townhall: townhall,
+  airport: plane
 };
 function formatDropdownValue(_ref) {
   var type = _ref.type,
@@ -486,21 +482,17 @@ function formatDropdownValue(_ref) {
   }).join(', '), "</span>").replace(/\s*\n\s*/g, ' ');
   return out;
 }
-// EXTERNAL MODULE: ./src/icons/algolia.svg
-var algolia = __webpack_require__(21);
-var algolia_default = /*#__PURE__*/__webpack_require__.n(algolia);
-
-// EXTERNAL MODULE: ./src/icons/osm.svg
-var osm = __webpack_require__(22);
-var osm_default = /*#__PURE__*/__webpack_require__.n(osm);
-
+// CONCATENATED MODULE: ./src/icons/algolia.svg
+/* harmony default export */ var algolia = ("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"117\" height=\"17\" viewBox=\"0 0 130 19\"><g fill=\"none\" fill-rule=\"evenodd\"><g fill-rule=\"nonzero\"><path fill=\"#5468FF\" d=\"M59.399.044h13.299a2.372 2.372 0 0 1 2.377 2.364v13.234a2.372 2.372 0 0 1-2.377 2.364H59.399a2.372 2.372 0 0 1-2.377-2.364V2.403A2.368 2.368 0 0 1 59.399.044z\"/><path fill=\"#FFF\" d=\"M66.257 4.582c-2.815 0-5.1 2.272-5.1 5.078 0 2.806 2.284 5.072 5.1 5.072 2.815 0 5.1-2.272 5.1-5.078 0-2.806-2.279-5.072-5.1-5.072zm0 8.652c-1.983 0-3.593-1.602-3.593-3.574 0-1.972 1.61-3.574 3.593-3.574 1.983 0 3.593 1.602 3.593 3.574a3.582 3.582 0 0 1-3.593 3.574zm0-6.418V9.48c0 .076.082.131.153.093l2.377-1.226c.055-.027.071-.093.044-.147a2.96 2.96 0 0 0-2.465-1.487c-.055 0-.11.044-.11.104h.001zm-3.33-1.956l-.312-.31a.783.783 0 0 0-1.106 0l-.372.37a.773.773 0 0 0 0 1.1l.307.305c.049.05.121.038.164-.01.181-.246.378-.48.597-.698.225-.223.455-.42.707-.599.055-.033.06-.109.016-.158h-.001zm5.001-.806v-.616a.781.781 0 0 0-.783-.779h-1.824a.78.78 0 0 0-.783.78v.631c0 .071.066.12.137.104a5.736 5.736 0 0 1 1.588-.223c.52 0 1.035.071 1.534.207a.106.106 0 0 0 .131-.104z\"/><path fill=\"#252C61\" d=\"M5.027 10.246c0 .698-.252 1.246-.757 1.644-.505.397-1.201.596-2.089.596-.888 0-1.615-.138-2.181-.414v-1.214c.358.168.739.301 1.141.397.403.097.778.145 1.125.145.508 0 .884-.097 1.125-.29a.945.945 0 0 0 .363-.779.978.978 0 0 0-.333-.747c-.222-.204-.68-.446-1.375-.725C1.33 8.57.825 8.24.531 7.865c-.294-.372-.44-.82-.44-1.343 0-.655.233-1.17.698-1.547.465-.376 1.09-.564 1.875-.564.752 0 1.5.165 2.245.494l-.408 1.047c-.698-.294-1.321-.44-1.869-.44-.415 0-.73.09-.945.271a.89.89 0 0 0-.322.717c0 .204.043.38.129.524.086.145.227.282.424.411.197.13.551.3 1.063.51.577.24.999.464 1.268.671.269.208.465.442.591.704.125.261.188.57.188.924l-.001.002zm3.98 2.24c-.924 0-1.646-.269-2.167-.808-.521-.539-.781-1.28-.781-2.226 0-.97.242-1.733.725-2.288.483-.555 1.148-.833 1.993-.833.784 0 1.404.238 1.858.714.455.476.682 1.132.682 1.966v.682H7.359c.018.577.174 1.02.467 1.33.294.31.707.464 1.241.464.351 0 .678-.033.98-.099a5.1 5.1 0 0 0 .975-.33v1.026a3.865 3.865 0 0 1-.935.312 5.723 5.723 0 0 1-1.08.091zm7.46-.107l-.252-.827h-.043c-.286.362-.575.608-.865.74-.29.13-.662.195-1.117.195-.584 0-1.039-.158-1.367-.473-.328-.315-.491-.76-.491-1.337 0-.612.227-1.074.682-1.386.455-.312 1.148-.482 2.079-.51l1.026-.032v-.317c0-.38-.089-.663-.266-.85-.177-.189-.452-.283-.824-.283-.304 0-.596.045-.875.134a6.68 6.68 0 0 0-.806.317l-.408-.902a4.414 4.414 0 0 1 1.058-.384 4.856 4.856 0 0 1 1.085-.132c.756 0 1.326.165 1.711.494.385.33.577.847.577 1.552v4.001h-.904zm5.677-6.048c.254 0 .464.018.628.054l-.124 1.176a2.383 2.383 0 0 0-.559-.064c-.505 0-.914.165-1.227.494-.313.33-.47.757-.47 1.284v3.104H19.13V6.44h.988l.167 1.047h.064c.197-.354.454-.636.771-.843a1.83 1.83 0 0 1 1.023-.312h.001zm4.125 6.155c-.899 0-1.582-.262-2.049-.787-.467-.525-.701-1.277-.701-2.259 0-.999.244-1.767.733-2.304.489-.537 1.195-.806 2.119-.806.627 0 1.191.116 1.692.35l-.381 1.014c-.534-.208-.974-.312-1.321-.312-1.028 0-1.542.682-1.542 2.046 0 .666.128 1.166.384 1.501.256.335.631.502 1.125.502a3.23 3.23 0 0 0 1.595-.419v1.101a2.53 2.53 0 0 1-.722.285 4.356 4.356 0 0 1-.932.086v.002zm8.277-.107h-1.268V8.727c0-.458-.092-.8-.277-1.026-.184-.226-.477-.338-.878-.338-.53 0-.919.158-1.168.475-.249.317-.373.848-.373 1.593v2.95H29.32V4.022h1.262v2.122c0 .34-.021.704-.064 1.09h.081a1.76 1.76 0 0 1 .717-.666c.306-.158.663-.236 1.072-.236 1.439 0 2.159.725 2.159 2.175v3.873l-.001-.002zm7.648-6.048c.741 0 1.319.27 1.732.806.414.537.62 1.291.62 2.261 0 .974-.209 1.732-.628 2.275-.419.542-1.001.814-1.746.814-.752 0-1.336-.27-1.751-.81h-.086l-.231.703h-.945V4.023h1.262V6.01l-.021.655-.032.553h.054c.401-.59.992-.886 1.772-.886zm2.917.107h1.375l1.208 3.368c.183.48.304.931.365 1.354h.043c.032-.197.091-.436.177-.717.086-.28.541-1.616 1.364-4.004h1.364l-2.541 6.73c-.462 1.235-1.232 1.853-2.31 1.853-.279 0-.551-.03-.816-.09v-1c.19.043.406.064.65.064.609 0 1.037-.353 1.284-1.058l.22-.559-2.385-5.94h.002zm-3.244.924c-.508 0-.875.15-1.098.448-.224.3-.339.8-.346 1.501v.086c0 .723.115 1.247.344 1.571.229.324.603.486 1.123.486.448 0 .787-.177 1.018-.532.231-.354.346-.867.346-1.536 0-1.35-.462-2.025-1.386-2.025l-.001.001zm-27.28 4.157c.458 0 .826-.128 1.104-.384.278-.256.416-.615.416-1.077v-.516l-.763.032c-.594.021-1.027.121-1.297.298s-.406.448-.406.814c0 .265.079.47.236.615.158.145.394.218.709.218h.001zM8.775 7.287c-.401 0-.722.127-.964.381s-.386.625-.432 1.112h2.696c-.007-.49-.125-.862-.354-1.115-.229-.252-.544-.379-.945-.379l-.001.001z\"/></g><path fill=\"#5468FF\" d=\"M102.162 13.784c0 1.455-.372 2.517-1.123 3.193-.75.676-1.895 1.013-3.44 1.013-.564 0-1.736-.109-2.673-.316l.345-1.689c.783.163 1.819.207 2.361.207.86 0 1.473-.174 1.84-.523.367-.349.548-.866.548-1.553v-.349a6.374 6.374 0 0 1-.838.316 4.151 4.151 0 0 1-1.194.158 4.515 4.515 0 0 1-1.616-.278 3.385 3.385 0 0 1-1.254-.817 3.744 3.744 0 0 1-.811-1.35c-.192-.54-.29-1.505-.29-2.213 0-.665.104-1.498.307-2.054a3.925 3.925 0 0 1 .904-1.433 4.124 4.124 0 0 1 1.441-.926 5.31 5.31 0 0 1 1.945-.365c.696 0 1.337.087 1.961.191a15.86 15.86 0 0 1 1.588.332v8.456h-.001zm-5.955-4.206c0 .893.197 1.885.592 2.3.394.413.904.62 1.528.62.34 0 .663-.049.964-.142a2.75 2.75 0 0 0 .734-.332v-5.29a8.531 8.531 0 0 0-1.413-.18c-.778-.022-1.369.294-1.786.801-.411.507-.619 1.395-.619 2.223zm16.121 0c0 .72-.104 1.264-.318 1.858a4.389 4.389 0 0 1-.904 1.52c-.389.42-.854.746-1.402.975-.548.23-1.391.36-1.813.36-.422-.005-1.26-.125-1.802-.36a4.088 4.088 0 0 1-1.397-.975 4.486 4.486 0 0 1-.909-1.52 5.037 5.037 0 0 1-.329-1.858c0-.719.099-1.41.318-1.999.219-.588.526-1.09.92-1.509.394-.42.865-.74 1.402-.97a4.547 4.547 0 0 1 1.786-.338 4.69 4.69 0 0 1 1.791.338c.548.23 1.019.55 1.402.97.389.42.69.921.909 1.51.23.587.345 1.28.345 1.998h.001zm-2.192.005c0-.92-.203-1.689-.597-2.223-.394-.539-.948-.806-1.654-.806-.707 0-1.26.267-1.654.806-.394.54-.586 1.302-.586 2.223 0 .932.197 1.558.592 2.098.394.545.948.812 1.654.812.707 0 1.26-.272 1.654-.812.394-.545.592-1.166.592-2.098h-.001zm6.963 4.708c-3.511.016-3.511-2.822-3.511-3.274L113.583.95l2.142-.338v10.003c0 .256 0 1.88 1.375 1.885v1.793h-.001zM120.873 14.291h-2.153V5.095l2.153-.338zM119.794 3.75c.718 0 1.304-.579 1.304-1.292 0-.714-.581-1.29-1.304-1.29-.723 0-1.304.577-1.304 1.29 0 .714.586 1.291 1.304 1.291zm6.431 1.012c.707 0 1.304.087 1.786.262.482.174.871.42 1.156.73.285.311.488.735.608 1.182.126.447.186.937.186 1.476v5.481a25.24 25.24 0 0 1-1.495.251c-.668.098-1.419.147-2.251.147a6.829 6.829 0 0 1-1.517-.158 3.213 3.213 0 0 1-1.178-.507 2.455 2.455 0 0 1-.761-.904c-.181-.37-.274-.893-.274-1.438 0-.523.104-.855.307-1.215.208-.36.487-.654.838-.883a3.609 3.609 0 0 1 1.227-.49 7.073 7.073 0 0 1 2.202-.103c.263.027.537.076.833.147v-.349c0-.245-.027-.479-.088-.697a1.486 1.486 0 0 0-.307-.583c-.148-.169-.34-.3-.581-.392a2.536 2.536 0 0 0-.915-.163c-.493 0-.942.06-1.353.131-.411.071-.75.153-1.008.245l-.257-1.749c.268-.093.668-.185 1.183-.278a9.335 9.335 0 0 1 1.66-.142h-.001zm.179 7.73c.657 0 1.145-.038 1.484-.104V10.22a5.097 5.097 0 0 0-1.978-.104c-.241.033-.46.098-.652.191a1.167 1.167 0 0 0-.466.392c-.121.17-.175.267-.175.523 0 .501.175.79.493.981.323.196.75.29 1.293.29h.001zM84.108 4.816c.707 0 1.304.087 1.786.262.482.174.871.42 1.156.73.29.316.487.735.608 1.182.126.447.186.937.186 1.476v5.481a25.24 25.24 0 0 1-1.495.251c-.668.098-1.419.147-2.251.147a6.829 6.829 0 0 1-1.517-.158 3.213 3.213 0 0 1-1.178-.507 2.455 2.455 0 0 1-.761-.904c-.181-.37-.274-.893-.274-1.438 0-.523.104-.855.307-1.215.208-.36.487-.654.838-.883a3.609 3.609 0 0 1 1.227-.49 7.073 7.073 0 0 1 2.202-.103c.257.027.537.076.833.147v-.349c0-.245-.027-.479-.088-.697a1.486 1.486 0 0 0-.307-.583c-.148-.169-.34-.3-.581-.392a2.536 2.536 0 0 0-.915-.163c-.493 0-.942.06-1.353.131-.411.071-.75.153-1.008.245l-.257-1.749c.268-.093.668-.185 1.183-.278a8.89 8.89 0 0 1 1.66-.142h-.001zm.185 7.736c.657 0 1.145-.038 1.484-.104V10.28a5.097 5.097 0 0 0-1.978-.104c-.241.033-.46.098-.652.191a1.167 1.167 0 0 0-.466.392c-.121.17-.175.267-.175.523 0 .501.175.79.493.981.318.191.75.29 1.293.29h.001zm8.683 1.738c-3.511.016-3.511-2.822-3.511-3.274L89.46.948 91.602.61v10.003c0 .256 0 1.88 1.375 1.885v1.793h-.001z\"/></g></svg>");
+// CONCATENATED MODULE: ./src/icons/osm.svg
+/* harmony default export */ var osm = ("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"12\" height=\"12\">\n  <path fill=\"#797979\" fill-rule=\"evenodd\" d=\"M6.577.5L5.304.005 2.627 1.02 0 0l.992 2.767-.986 2.685.998 2.76-1 2.717.613.22 3.39-3.45.563.06.726-.69s-.717-.92-.91-1.86c.193-.146.184-.14.355-.285C4.1 1.93 6.58.5 6.58.5zm-4.17 11.354l.22.12 2.68-1.05 2.62 1.04 2.644-1.03 1.02-2.717-.33-.944s-1.13 1.26-3.44.878c-.174.29-.25.37-.25.37s-1.11-.31-1.683-.89c-.573.58-.795.71-.795.71l.08.634-2.76 2.89zm6.26-4.395c1.817 0 3.29-1.53 3.29-3.4 0-1.88-1.473-3.4-3.29-3.4s-3.29 1.52-3.29 3.4c0 1.87 1.473 3.4 3.29 3.4z\"/>\n</svg>\n");
 // CONCATENATED MODULE: ./src/defaultTemplates.js
 
 
 
 
 /* harmony default export */ var defaultTemplates = __webpack_exports__["a"] = ({
-  footer: "<div class=\"ap-footer\">\n  Built by <a href=\"https://www.algolia.com/places\" title=\"Search by Algolia\" class=\"ap-footer-algolia\">".concat(algolia_default.a.trim(), "</a>\n  using <a href=\"https://community.algolia.com/places/documentation.html#license\" class=\"ap-footer-osm\" title=\"Algolia Places data \xA9 OpenStreetMap contributors\">").concat(osm_default.a.trim(), " <span>data</span></a>\n  </div>"),
+  footer: "<div class=\"ap-footer\">\n  <a href=\"https://www.algolia.com/places\" title=\"Search by Algolia\" class=\"ap-footer-algolia\">".concat(algolia.trim(), "</a>\n  using <a href=\"https://community.algolia.com/places/documentation.html#license\" class=\"ap-footer-osm\" title=\"Algolia Places data \xA9 OpenStreetMap contributors\">").concat(osm.trim(), " <span>data</span></a>\n  </div>"),
   value: formatInputValue,
   suggestion: formatDropdownValue
 });
@@ -510,6 +502,9 @@ var osm_default = /*#__PURE__*/__webpack_require__.n(osm);
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, "a", function() { return /* binding */ formatHit; });
 
 // CONCATENATED MODULE: ./src/findCountryCode.js
 function findCountryCode(tags) {
@@ -546,8 +541,9 @@ function findType(tags) {
   return 'address';
 }
 // CONCATENATED MODULE: ./src/formatHit.js
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return formatHit; });
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -641,7 +637,7 @@ function formatHit(_ref) {
     var suburb = hit.suburb && hit.suburb[0] !== name ? hit.suburb[0] : undefined;
     var county = hit.county && hit.county[0] !== name ? hit.county[0] : undefined;
 
-    var _ref2 = hit.postcode ? getBestPostcode(hit.postcode, hit._highlightResult.postcode) : {
+    var _ref2 = hit.postcode && hit.postcode.length ? getBestPostcode(hit.postcode, hit._highlightResult.postcode) : {
       postcode: undefined,
       highlightedPostcode: undefined
     },
@@ -671,7 +667,7 @@ function formatHit(_ref) {
         lng: hit._geoloc.lng
       },
       postcode: postcode,
-      postcodes: hit.postcode ? hit.postcode : undefined
+      postcodes: hit.postcode && hit.postcode.length ? hit.postcode : undefined
     }; // this is the value to put inside the <input value=
 
     var value = formatInputValue(suggestion);
@@ -896,7 +892,7 @@ process.umask = function() { return 0; };
 // We use custom error "types" so that we can act on them when we need it
 // e.g.: if error instanceof errors.UnparsableJSON then..
 
-var inherits = __webpack_require__(29);
+var inherits = __webpack_require__(21);
 
 function AlgoliaSearchError(message, extraProperties) {
   var forEach = __webpack_require__(3);
@@ -949,7 +945,7 @@ module.exports = {
   ),
   RequestTimeout: createCustomError(
     'RequestTimeout',
-    'Request timedout before getting a response'
+    'Request timed out before getting a response'
   ),
   Network: createCustomError(
     'Network',
@@ -959,9 +955,17 @@ module.exports = {
     'JSONPScriptFail',
     '<script> was loaded but did not call our provided callback'
   ),
+  ValidUntilNotFound: createCustomError(
+    'ValidUntilNotFound',
+    'The SecuredAPIKey does not have a validUntil parameter.'
+  ),
   JSONPScriptError: createCustomError(
     'JSONPScriptError',
     '<script> unable to load due to an `error` event on it'
+  ),
+  ObjectNotFound: createCustomError(
+    'ObjectNotFound',
+    'Object not found'
   ),
   Unknown: createCustomError(
     'Unknown',
@@ -1006,7 +1010,7 @@ module.exports = function map(arr, fn) {
  * Expose `debug()` as the module.
  */
 
-exports = module.exports = __webpack_require__(51);
+exports = module.exports = __webpack_require__(43);
 exports.log = log;
 exports.formatArgs = formatArgs;
 exports.save = save;
@@ -1190,60 +1194,19 @@ function localstorage() {
 
 /***/ }),
 /* 15 */
-/***/ (function(module, exports) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 18 19\"><path d=\"M12 9V3L9 0 6 3v2H0v14h18V9h-6zm-8 8H2v-2h2v2zm0-4H2v-2h2v2zm0-4H2V7h2v2zm6 8H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V7h2v2zm0-4H8V3h2v2zm6 12h-2v-2h2v2zm0-4h-2v-2h2v2z\"/></svg>\n"
+"use strict";
+/* harmony default export */ __webpack_exports__["a"] = (".algolia-places {\n  width: 100%;\n}\n\n.ap-input, .ap-hint {\n  width: 100%;\n  padding-right: 35px;\n  padding-left: 16px;\n  line-height: 40px;\n  height: 40px;\n  border: 1px solid #CCC;\n  border-radius: 3px;\n  outline: none;\n  font: inherit;\n  appearance: none;\n  -webkit-appearance: none;\n  box-sizing: border-box;\n}\n\n.ap-input::-webkit-search-decoration {\n  -webkit-appearance: none;\n}\n\n.ap-input::-ms-clear {\n  display: none;\n}\n\n.ap-input:hover ~ .ap-input-icon svg,\n.ap-input:focus ~ .ap-input-icon svg,\n.ap-input-icon:hover svg {\n  fill: #aaaaaa;\n}\n\n.ap-dropdown-menu {\n  width: 100%;\n  background: #ffffff;\n  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.2), 0 2px 4px 0 rgba(0, 0, 0, 0.1);\n  border-radius: 3px;\n  margin-top: 3px;\n  overflow: hidden;\n}\n\n.ap-suggestion {\n  cursor: pointer;\n  height: 46px;\n  line-height: 46px;\n  padding-left: 18px;\n  overflow: hidden;\n}\n\n.ap-suggestion em {\n  font-weight: bold;\n  font-style: normal;\n}\n\n.ap-address {\n  font-size: smaller;\n  margin-left: 12px;\n  color: #aaaaaa;\n}\n\n.ap-suggestion-icon {\n  margin-right: 10px;\n  width: 14px;\n  height: 20px;\n  vertical-align: middle;\n}\n\n.ap-suggestion-icon svg {\n  display: inherit;\n  -webkit-transform: scale(0.9) translateY(2px);\n          transform: scale(0.9) translateY(2px);\n  fill: #cfcfcf;\n}\n\n.ap-input-icon {\n  border: 0;\n  background: transparent;\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  right: 16px;\n  outline: none;\n}\n\n.ap-input-icon.ap-icon-pin {\n  cursor: pointer;\n}\n\n.ap-input-icon svg {\n  fill: #cfcfcf;\n  position: absolute;\n  top: 50%;\n  right: 0;\n  -webkit-transform: translateY(-50%);\n          transform: translateY(-50%);\n}\n\n.ap-cursor {\n  background: #efefef;\n}\n\n.ap-cursor .ap-suggestion-icon svg {\n  -webkit-transform: scale(1) translateY(2px);\n          transform: scale(1) translateY(2px);\n  fill: #aaaaaa;\n}\n\n.ap-footer {\n  opacity: .8;\n  text-align: right;\n  padding: .5em 1em .5em 0;\n  font-size: 12px;\n  line-height: 12px;\n}\n\n.ap-footer a {\n  color: inherit;\n  text-decoration: none;\n}\n\n.ap-footer a svg {\n  vertical-align: middle;\n}\n\n.ap-footer:hover {\n  opacity: 1;\n}\n");
 
 /***/ }),
 /* 16 */
-/***/ (function(module, exports) {
-
-module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 20 20\">\n  <path d=\"M10 0C4.48 0 0 4.48 0 10s4.48 10 10 10 10-4.48 10-10S15.52 0 10 0zM9 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L7 13v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H6V8h2c.55 0 1-.45 1-1V5h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z\"/>\n</svg>\n"
-
-/***/ }),
-/* 17 */
-/***/ (function(module, exports) {
-
-module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 54.9 50.5\"><path d=\"M9.6 12.7H8.5c-2.3 0-4.1 1.9-4.1 4.1v1.1c0 2.2 1.8 4 4 4.1v21.7h-.7c-1.3 0-2.3 1-2.3 2.3h7.1c0-1.3-1-2.3-2.3-2.3h-.5V22.1c2.2-.1 4-1.9 4-4.1v-1.1c0-2.3-1.8-4.2-4.1-4.2zM46 7.6h-7.5c0-1.8-1.5-3.3-3.3-3.3h-3.6c-1.8 0-3.3 1.5-3.3 3.3H21c-2.5 0-4.6 2-4.6 4.6v26.3c0 1.7 1.3 3.1 3 3.1h.8v1.6c0 1.7 1.4 3.1 3.1 3.1 1.7 0 3-1.4 3-3.1v-1.6h14.3v1.6c0 1.7 1.4 3.1 3.1 3.1 1.7 0 3.1-1.4 3.1-3.1v-1.6h.8c1.7 0 3.1-1.4 3.1-3.1V12.2c-.2-2.5-2.2-4.6-4.7-4.6zm-27.4 4.6c0-1.3 1.1-2.4 2.4-2.4h25c1.3 0 2.4 1.1 2.4 2.4v.3c0 1.3-1.1 2.4-2.4 2.4H21c-1.3 0-2.4-1.1-2.4-2.4v-.3zM21 38c-1.5 0-2.7-1.2-2.7-2.7 0-1.5 1.2-2.7 2.7-2.7 1.5 0 2.7 1.2 2.7 2.7 0 1.5-1.2 2.7-2.7 2.7zm0-10.1c-1.3 0-2.4-1.1-2.4-2.4v-6.6c0-1.3 1.1-2.4 2.4-2.4h25c1.3 0 2.4 1.1 2.4 2.4v6.6c0 1.3-1.1 2.4-2.4 2.4H21zm24.8 10c-1.5 0-2.7-1.2-2.7-2.7 0-1.5 1.2-2.7 2.7-2.7 1.5 0 2.7 1.2 2.7 2.7 0 1.5-1.2 2.7-2.7 2.7z\"/></svg>\n"
-
-/***/ }),
-/* 18 */
-/***/ (function(module, exports) {
-
-module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 15 20\">\n  <path d=\"M13.105 20l-2.366-3.354H4.26L1.907 20H0l3.297-4.787c-1.1-.177-2.196-1.287-2.194-2.642V2.68C1.1 1.28 2.317-.002 3.973 0h7.065c1.647-.002 2.863 1.28 2.86 2.676v9.895c.003 1.36-1.094 2.47-2.194 2.647L15 20h-1.895zM6.11 2h2.78c.264 0 .472-.123.472-.27v-.46c0-.147-.22-.268-.472-.27H6.11c-.252.002-.47.123-.47.27v.46c0 .146.206.27.47.27zm6.26 3.952V4.175c-.004-.74-.5-1.387-1.436-1.388H4.066c-.936 0-1.43.648-1.436 1.388v1.777c-.002.86.644 1.384 1.436 1.388h6.868c.793-.004 1.44-.528 1.436-1.388zm-8.465 5.386c-.69-.003-1.254.54-1.252 1.21-.002.673.56 1.217 1.252 1.222.697-.006 1.26-.55 1.262-1.22-.002-.672-.565-1.215-1.262-1.212zm8.42 1.21c-.005-.67-.567-1.213-1.265-1.21-.69-.003-1.253.54-1.25 1.21-.003.673.56 1.217 1.25 1.222.698-.006 1.26-.55 1.264-1.22z\"/>\n</svg>\n"
-
-/***/ }),
-/* 19 */
-/***/ (function(module, exports) {
-
-module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\"><path d=\"M12 .6L2.5 6.9h18.9L12 .6zM3.8 8.2c-.7 0-1.3.6-1.3 1.3v8.8L.3 22.1c-.2.3-.3.5-.3.6 0 .6.8.6 1.3.6h21.5c.4 0 1.3 0 1.3-.6 0-.2-.1-.3-.3-.6l-2.2-3.8V9.5c0-.7-.6-1.3-1.3-1.3H3.8zm2.5 2.5c.7 0 1.1.6 1.3 1.3v7.6H5.1V12c0-.7.5-1.3 1.2-1.3zm5.7 0c.7 0 1.3.6 1.3 1.3v7.6h-2.5V12c-.1-.7.5-1.3 1.2-1.3zm5.7 0c.7 0 1.3.6 1.3 1.3v7.6h-2.5V12c-.1-.7.5-1.3 1.2-1.3z\"/></svg>\n"
-
-/***/ }),
-/* 20 */
-/***/ (function(module, exports) {
-
-module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"20\" height=\"20\" viewBox=\"0 0 24 24\"><path d=\"M22.9 1.1s1.3.3-4.3 6.5l.7 3.8.2-.2c.4-.4 1-.4 1.3 0 .4.4.4 1 0 1.3l-1.2 1.2.3 1.7.1-.1c.4-.4 1-.4 1.3 0 .4.4.4 1 0 1.3l-1.1 1.1c.2 1.9.3 3.6.1 4.5 0 0-1.2 1.2-1.8.5 0 0-2.3-7.7-3.8-11.1-5.9 6-6.4 5.6-6.4 5.6s1.2 3.8-.2 5.2l-2.3-4.3h.1l-4.3-2.3c1.3-1.3 5.2-.2 5.2-.2s-.5-.4 5.6-6.3C8.9 7.7 1.2 5.5 1.2 5.5c-.7-.7.5-1.8.5-1.8.9-.2 2.6-.1 4.5.1l1.1-1.1c.4-.4 1-.4 1.3 0 .4.4.4 1 0 1.3l1.7.3 1.2-1.2c.4-.4 1-.4 1.3 0 .4.4.4 1 0 1.3l-.2.2 3.8.7c6.2-5.5 6.5-4.2 6.5-4.2z\"/></svg>\n"
-
-/***/ }),
-/* 21 */
-/***/ (function(module, exports) {
-
-module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" id=\"Layer_1\" baseProfile=\"basic\" viewBox=\"0 0 1366 362\">\n  <linearGradient id=\"SVGID_1_\" x1=\"428.2578\" x2=\"434.1453\" y1=\"404.1504\" y2=\"409.8504\" gradientUnits=\"userSpaceOnUse\" gradientTransform=\"matrix(94.045 0 0 -94.072 -40381.527 38479.52)\">\n    <stop offset=\"0\" stop-color=\"#00AEFF\"/>\n    <stop offset=\"1\" stop-color=\"#3369E7\"/>\n  </linearGradient>\n  <path d=\"M61.8 15.4h242.8c23.9 0 43.4 19.4 43.4 43.4v242.9c0 23.9-19.4 43.4-43.4 43.4H61.8c-23.9 0-43.4-19.4-43.4-43.4v-243c0-23.9 19.4-43.3 43.4-43.3z\" fill=\"url(#SVGID_1_)\"/>\n  <path d=\"M187 98.7c-51.4 0-93.1 41.7-93.1 93.2S135.6 285 187 285s93.1-41.7 93.1-93.2-41.6-93.1-93.1-93.1zm0 158.8c-36.2 0-65.6-29.4-65.6-65.6s29.4-65.6 65.6-65.6 65.6 29.4 65.6 65.6-29.3 65.6-65.6 65.6zm0-117.8v48.9c0 1.4 1.5 2.4 2.8 1.7l43.4-22.5c1-.5 1.3-1.7.8-2.7-9-15.8-25.7-26.6-45-27.3-1 0-2 .8-2 1.9zm-60.8-35.9l-5.7-5.7c-5.6-5.6-14.6-5.6-20.2 0l-6.8 6.8c-5.6 5.6-5.6 14.6 0 20.2l5.6 5.6c.9.9 2.2.7 3-.2 3.3-4.5 6.9-8.8 10.9-12.8 4.1-4.1 8.3-7.7 12.9-11 1-.6 1.1-2 .3-2.9zM217.5 89V77.7c0-7.9-6.4-14.3-14.3-14.3h-33.3c-7.9 0-14.3 6.4-14.3 14.3v11.6c0 1.3 1.2 2.2 2.5 1.9 9.3-2.7 19.1-4.1 29-4.1 9.5 0 18.9 1.3 28 3.8 1.2.3 2.4-.6 2.4-1.9z\" fill=\"#FFFFFF\"/>\n  <path d=\"M842.5 267.6c0 26.7-6.8 46.2-20.5 58.6-13.7 12.4-34.6 18.6-62.8 18.6-10.3 0-31.7-2-48.8-5.8l6.3-31c14.3 3 33.2 3.8 43.1 3.8 15.7 0 26.9-3.2 33.6-9.6s10-15.9 10-28.5v-6.4c-3.9 1.9-9 3.8-15.3 5.8-6.3 1.9-13.6 2.9-21.8 2.9-10.8 0-20.6-1.7-29.5-5.1-8.9-3.4-16.6-8.4-22.9-15-6.3-6.6-11.3-14.9-14.8-24.8s-5.3-27.6-5.3-40.6c0-12.2 1.9-27.5 5.6-37.7 3.8-10.2 9.2-19 16.5-26.3 7.2-7.3 16-12.9 26.3-17s22.4-6.7 35.5-6.7c12.7 0 24.4 1.6 35.8 3.5 11.4 1.9 21.1 3.9 29 6.1v155.2zm-108.7-77.2c0 16.4 3.6 34.6 10.8 42.2 7.2 7.6 16.5 11.4 27.9 11.4 6.2 0 12.1-.9 17.6-2.6 5.5-1.7 9.9-3.7 13.4-6.1v-97.1c-2.8-.6-14.5-3-25.8-3.3-14.2-.4-25 5.4-32.6 14.7-7.5 9.3-11.3 25.6-11.3 40.8zm294.3 0c0 13.2-1.9 23.2-5.8 34.1s-9.4 20.2-16.5 27.9c-7.1 7.7-15.6 13.7-25.6 17.9s-25.4 6.6-33.1 6.6c-7.7-.1-23-2.3-32.9-6.6-9.9-4.3-18.4-10.2-25.5-17.9-7.1-7.7-12.6-17-16.6-27.9s-6-20.9-6-34.1c0-13.2 1.8-25.9 5.8-36.7 4-10.8 9.6-20 16.8-27.7s15.8-13.6 25.6-17.8c9.9-4.2 20.8-6.2 32.6-6.2s22.7 2.1 32.7 6.2c10 4.2 18.6 10.1 25.6 17.8 7.1 7.7 12.6 16.9 16.6 27.7 4.2 10.8 6.3 23.5 6.3 36.7zm-40 .1c0-16.9-3.7-31-10.9-40.8-7.2-9.9-17.3-14.8-30.2-14.8-12.9 0-23 4.9-30.2 14.8-7.2 9.9-10.7 23.9-10.7 40.8 0 17.1 3.6 28.6 10.8 38.5 7.2 10 17.3 14.9 30.2 14.9 12.9 0 23-5 30.2-14.9 7.2-10 10.8-21.4 10.8-38.5zm127.1 86.4c-64.1.3-64.1-51.8-64.1-60.1L1051 32l39.1-6.2v183.6c0 4.7 0 34.5 25.1 34.6v32.9zm68.9 0h-39.3V108.1l39.3-6.2v175zm-19.7-193.5c13.1 0 23.8-10.6 23.8-23.7S1177.6 36 1164.4 36s-23.8 10.6-23.8 23.7 10.7 23.7 23.8 23.7zm117.4 18.6c12.9 0 23.8 1.6 32.6 4.8 8.8 3.2 15.9 7.7 21.1 13.4s8.9 13.5 11.1 21.7c2.3 8.2 3.4 17.2 3.4 27.1v100.6c-6 1.3-15.1 2.8-27.3 4.6s-25.9 2.7-41.1 2.7c-10.1 0-19.4-1-27.7-2.9-8.4-1.9-15.5-5-21.5-9.3-5.9-4.3-10.5-9.8-13.9-16.6-3.3-6.8-5-16.4-5-26.4 0-9.6 1.9-15.7 5.6-22.3 3.8-6.6 8.9-12 15.3-16.2 6.5-4.2 13.9-7.2 22.4-9s17.4-2.7 26.6-2.7c4.3 0 8.8.3 13.6.8s9.8 1.4 15.2 2.7v-6.4c0-4.5-.5-8.8-1.6-12.8-1.1-4.1-3-7.6-5.6-10.7-2.7-3.1-6.2-5.5-10.6-7.2s-10-3-16.7-3c-9 0-17.2 1.1-24.7 2.4-7.5 1.3-13.7 2.8-18.4 4.5l-4.7-32.1c4.9-1.7 12.2-3.4 21.6-5.1s19.5-2.6 30.3-2.6zm3.3 141.9c12 0 20.9-.7 27.1-1.9v-39.8c-2.2-.6-5.3-1.3-9.4-1.9-4.1-.6-8.6-1-13.6-1-4.3 0-8.7.3-13.1 1-4.4.6-8.4 1.8-11.9 3.5s-6.4 4.1-8.5 7.2c-2.2 3.1-3.2 4.9-3.2 9.6 0 9.2 3.2 14.5 9 18 5.9 3.6 13.7 5.3 23.6 5.3zM512.9 103c12.9 0 23.8 1.6 32.6 4.8 8.8 3.2 15.9 7.7 21.1 13.4 5.3 5.8 8.9 13.5 11.1 21.7 2.3 8.2 3.4 17.2 3.4 27.1v100.6c-6 1.3-15.1 2.8-27.3 4.6-12.2 1.8-25.9 2.7-41.1 2.7-10.1 0-19.4-1-27.7-2.9-8.4-1.9-15.5-5-21.5-9.3-5.9-4.3-10.5-9.8-13.9-16.6-3.3-6.8-5-16.4-5-26.4 0-9.6 1.9-15.7 5.6-22.3 3.8-6.6 8.9-12 15.3-16.2 6.5-4.2 13.9-7.2 22.4-9s17.4-2.7 26.6-2.7c4.3 0 8.8.3 13.6.8 4.7.5 9.8 1.4 15.2 2.7v-6.4c0-4.5-.5-8.8-1.6-12.8-1.1-4.1-3-7.6-5.6-10.7-2.7-3.1-6.2-5.5-10.6-7.2-4.4-1.7-10-3-16.7-3-9 0-17.2 1.1-24.7 2.4-7.5 1.3-13.7 2.8-18.4 4.5l-4.7-32.1c4.9-1.7 12.2-3.4 21.6-5.1 9.4-1.8 19.5-2.6 30.3-2.6zm3.4 142c12 0 20.9-.7 27.1-1.9v-39.8c-2.2-.6-5.3-1.3-9.4-1.9-4.1-.6-8.6-1-13.6-1-4.3 0-8.7.3-13.1 1-4.4.6-8.4 1.8-11.9 3.5s-6.4 4.1-8.5 7.2c-2.2 3.1-3.2 4.9-3.2 9.6 0 9.2 3.2 14.5 9 18s13.7 5.3 23.6 5.3zm158.5 31.9c-64.1.3-64.1-51.8-64.1-60.1L610.6 32l39.1-6.2v183.6c0 4.7 0 34.5 25.1 34.6v32.9z\" fill=\"#182359\"/></svg>"
-
-/***/ }),
-/* 22 */
-/***/ (function(module, exports) {
-
-module.exports = "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"12\" height=\"12\">\n  <path fill=\"#797979\" fill-rule=\"evenodd\" d=\"M6.577.5L5.304.005 2.627 1.02 0 0l.992 2.767-.986 2.685.998 2.76-1 2.717.613.22 3.39-3.45.563.06.726-.69s-.717-.92-.91-1.86c.193-.146.184-.14.355-.285C4.1 1.93 6.58.5 6.58.5zm-4.17 11.354l.22.12 2.68-1.05 2.62 1.04 2.644-1.03 1.02-2.717-.33-.944s-1.13 1.26-3.44.878c-.174.29-.25.37-.25.37s-1.11-.31-1.683-.89c-.573.58-.795.71-.795.71l.08.634-2.76 2.89zm6.26-4.395c1.817 0 3.29-1.53 3.29-3.4 0-1.88-1.473-3.4-3.29-3.4s-3.29 1.52-3.29 3.4c0 1.87 1.473 3.4 3.29 3.4z\"/>\n</svg>\n"
-
-/***/ }),
-/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var immediate = __webpack_require__(66);
+var immediate = __webpack_require__(58);
 var splitter = /\s+/;
 
 module.exports = {
@@ -1346,7 +1309,7 @@ function bindContext(fn, context) {
 
 
 /***/ }),
-/* 24 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1450,13 +1413,7 @@ module.exports = css;
 
 
 /***/ }),
-/* 25 */
-/***/ (function(module, exports) {
-
-module.exports = ".algolia-places {\n  width: 100%;\n}\n\n.ap-input, .ap-hint {\n  width: 100%;\n  padding-right: 35px;\n  padding-left: 16px;\n  line-height: 40px;\n  height: 40px;\n  border: 1px solid #CCC;\n  border-radius: 3px;\n  outline: none;\n  font: inherit;\n  appearance: none;\n  -webkit-appearance: none;\n  box-sizing: border-box;\n}\n\n.ap-input::-webkit-search-decoration {\n  -webkit-appearance: none;\n}\n\n.ap-input::-ms-clear {\n  display: none;\n}\n\n.ap-input:hover ~ .ap-input-icon svg,\n.ap-input:focus ~ .ap-input-icon svg,\n.ap-input-icon:hover svg {\n  fill: #aaaaaa;\n}\n\n.ap-dropdown-menu {\n  width: 100%;\n  background: #ffffff;\n  box-shadow: 0 1px 10px rgba(0, 0, 0, 0.2), 0 2px 4px 0 rgba(0, 0, 0, 0.1);\n  border-radius: 3px;\n  margin-top: 3px;\n  overflow: hidden;\n}\n\n.ap-suggestion {\n  cursor: pointer;\n  height: 46px;\n  line-height: 46px;\n  padding-left: 18px;\n  overflow: hidden;\n}\n\n.ap-suggestion em {\n  font-weight: bold;\n  font-style: normal;\n}\n\n.ap-address {\n  font-size: smaller;\n  margin-left: 12px;\n  color: #aaaaaa;\n}\n\n.ap-suggestion-icon {\n  margin-right: 10px;\n  width: 14px;\n  height: 20px;\n  vertical-align: middle;\n}\n\n.ap-suggestion-icon svg {\n  -webkit-transform: scale(0.9) translateY(2px);\n          transform: scale(0.9) translateY(2px);\n  fill: #cfcfcf;\n}\n\n.ap-input-icon {\n  border: 0;\n  background: transparent;\n  position: absolute;\n  top: 0;\n  bottom: 0;\n  right: 16px;\n  outline: none;\n}\n\n.ap-input-icon.ap-icon-pin {\n  cursor: initial;\n}\n\n.ap-input-icon svg {\n  fill: #cfcfcf;\n  position: absolute;\n  top: 50%;\n  right: 0;\n  -webkit-transform: translateY(-50%);\n          transform: translateY(-50%);\n}\n\n.ap-cursor {\n  background: #efefef;\n}\n\n.ap-cursor .ap-suggestion-icon svg {\n  -webkit-transform: scale(1) translateY(2px);\n          transform: scale(1) translateY(2px);\n  fill: #aaaaaa;\n}\n\n.ap-footer {\n  opacity: .8;\n  text-align: right;\n  padding: .5em 1em .5em 0;\n  font-size: 12px;\n  line-height: 12px;\n}\n\n.ap-footer a {\n  color: inherit;\n  text-decoration: none;\n}\n\n.ap-footer a svg {\n  vertical-align: text-bottom;\n  max-width: 60px;\n}\n\n.ap-footer:hover {\n  opacity: 1;\n}\n"
-
-/***/ }),
-/* 26 */
+/* 18 */
 /***/ (function(module, exports) {
 
 var containers = []; // will store container HTMLElement references
@@ -1520,11 +1477,15 @@ module.exports.insertCss = insertCss;
 
 
 /***/ }),
-/* 27 */
+/* 19 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+// ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, "default", function() { return /* binding */ createAutocompleteDataset; });
 
 // EXTERNAL MODULE: ./src/configure/index.js
 var configure = __webpack_require__(1);
@@ -1536,7 +1497,9 @@ var formatHit = __webpack_require__(9);
 var version = __webpack_require__(6);
 
 // CONCATENATED MODULE: ./src/createAutocompleteSource.js
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -1549,6 +1512,7 @@ function createAutocompleteSource(_ref) {
       apiKey = _ref.apiKey,
       appId = _ref.appId,
       hitsPerPage = _ref.hitsPerPage,
+      postcodeSearch = _ref.postcodeSearch,
       aroundLatLng = _ref.aroundLatLng,
       aroundRadius = _ref.aroundRadius,
       aroundLatLngViaIP = _ref.aroundLatLngViaIP,
@@ -1572,12 +1536,14 @@ function createAutocompleteSource(_ref) {
     throw e;
   } : _ref$onError,
       onRateLimitReached = _ref.onRateLimitReached,
+      onInvalidCredentials = _ref.onInvalidCredentials,
       type = _ref.type;
   var placesClient = algoliasearch.initPlaces(appId, apiKey, clientOptions);
   placesClient.as.addAlgoliaAgent("Algolia Places ".concat(version["default"]));
   var configuration = Object(configure["a" /* default */])({
     hitsPerPage: hitsPerPage,
     type: type,
+    postcodeSearch: postcodeSearch,
     countries: countries,
     language: language,
     aroundLatLng: aroundLatLng,
@@ -1591,7 +1557,8 @@ function createAutocompleteSource(_ref) {
     useDeviceLocation: useDeviceLocation,
     onHits: onHits,
     onError: onError,
-    onRateLimitReached: onRateLimitReached
+    onRateLimitReached: onRateLimitReached,
+    onInvalidCredentials: onInvalidCredentials
   });
   var params = configuration.params;
   var controls = configuration.controls;
@@ -1606,11 +1573,14 @@ function createAutocompleteSource(_ref) {
   }
 
   function searcher(query, cb) {
-    var searchParams = Object.assign({}, params, userCoords && {
-      aroundLatLng: userCoords
-    }, {
+    var searchParams = _objectSpread({}, params, {
       query: query
     });
+
+    if (userCoords) {
+      searchParams.aroundLatLng = userCoords;
+    }
+
     return placesClient.search(controls.computeQueryParams(searchParams)).then(function (content) {
       var hits = content.hits.map(function (hit, hitIndex) {
         return Object(formatHit["a" /* default */])({
@@ -1627,8 +1597,11 @@ function createAutocompleteSource(_ref) {
         rawAnswer: content
       });
       return hits;
-    }).then(cb).catch(function (e) {
-      if (e.statusCode === 429) {
+    }).then(cb)["catch"](function (e) {
+      if (e.statusCode === 403 && e.message === 'Invalid Application-ID or API key') {
+        controls.onInvalidCredentials();
+        return;
+      } else if (e.statusCode === 429) {
         controls.onRateLimitReached();
         return;
       }
@@ -1638,7 +1611,7 @@ function createAutocompleteSource(_ref) {
   }
 
   searcher.configure = function (partial) {
-    var updated = Object(configure["a" /* default */])(_objectSpread({}, params, controls, partial));
+    var updated = Object(configure["a" /* default */])(_objectSpread({}, params, {}, controls, {}, partial));
     params = updated.params;
     controls = updated.controls;
 
@@ -1656,19 +1629,20 @@ function createAutocompleteSource(_ref) {
 
   return searcher;
 }
-// EXTERNAL MODULE: ./src/defaultTemplates.js + 2 modules
+// EXTERNAL MODULE: ./src/defaultTemplates.js + 10 modules
 var defaultTemplates = __webpack_require__(8);
 
 // CONCATENATED MODULE: ./src/createAutocompleteDataset.js
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return createAutocompleteDataset; });
-function createAutocompleteDataset_objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { createAutocompleteDataset_defineProperty(target, key, source[key]); }); } return target; }
+function createAutocompleteDataset_ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function createAutocompleteDataset_objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { createAutocompleteDataset_ownKeys(Object(source), true).forEach(function (key) { createAutocompleteDataset_defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { createAutocompleteDataset_ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function createAutocompleteDataset_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 
 
 function createAutocompleteDataset(options) {
-  var templates = createAutocompleteDataset_objectSpread({}, defaultTemplates["a" /* default */], options.templates);
+  var templates = createAutocompleteDataset_objectSpread({}, defaultTemplates["a" /* default */], {}, options.templates);
 
   var source = createAutocompleteSource(createAutocompleteDataset_objectSpread({}, options, {
     formatInputValue: templates.value,
@@ -1678,54 +1652,59 @@ function createAutocompleteDataset(options) {
     source: source,
     templates: templates,
     displayKey: 'value',
-    name: 'places'
+    name: 'places',
+    cache: false
   };
 }
 
 /***/ }),
-/* 28 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var AlgoliaSearchCore = __webpack_require__(42);
-var createAlgoliasearch = __webpack_require__(53);
+var AlgoliaSearchCore = __webpack_require__(34);
+var createAlgoliasearch = __webpack_require__(45);
 
-module.exports = createAlgoliasearch(AlgoliaSearchCore, '(lite) ');
+module.exports = createAlgoliasearch(AlgoliaSearchCore, 'Browser (lite)');
 
 
 /***/ }),
-/* 29 */
+/* 21 */
 /***/ (function(module, exports) {
 
 if (typeof Object.create === 'function') {
   // implementation from standard node.js 'util' module
   module.exports = function inherits(ctor, superCtor) {
-    ctor.super_ = superCtor
-    ctor.prototype = Object.create(superCtor.prototype, {
-      constructor: {
-        value: ctor,
-        enumerable: false,
-        writable: true,
-        configurable: true
-      }
-    });
+    if (superCtor) {
+      ctor.super_ = superCtor
+      ctor.prototype = Object.create(superCtor.prototype, {
+        constructor: {
+          value: ctor,
+          enumerable: false,
+          writable: true,
+          configurable: true
+        }
+      })
+    }
   };
 } else {
   // old school shim for old browsers
   module.exports = function inherits(ctor, superCtor) {
-    ctor.super_ = superCtor
-    var TempCtor = function () {}
-    TempCtor.prototype = superCtor.prototype
-    ctor.prototype = new TempCtor()
-    ctor.prototype.constructor = ctor
+    if (superCtor) {
+      ctor.super_ = superCtor
+      var TempCtor = function () {}
+      TempCtor.prototype = superCtor.prototype
+      ctor.prototype = new TempCtor()
+      ctor.prototype.constructor = ctor
+    }
   }
 }
 
 
 /***/ }),
-/* 30 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = buildSearchMethod;
@@ -1798,11 +1777,11 @@ function buildSearchMethod(queryParam, url) {
 
 
 /***/ }),
-/* 31 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = function omit(obj, test) {
-  var keys = __webpack_require__(48);
+  var keys = __webpack_require__(40);
   var foreach = __webpack_require__(3);
 
   var filtered = {};
@@ -1818,7 +1797,31 @@ module.exports = function omit(obj, test) {
 
 
 /***/ }),
-/* 32 */
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var toStr = Object.prototype.toString;
+
+module.exports = function isArguments(value) {
+	var str = toStr.call(value);
+	var isArgs = str === '[object Arguments]';
+	if (!isArgs) {
+		isArgs = str !== '[object Array]' &&
+			value !== null &&
+			typeof value === 'object' &&
+			typeof value.length === 'number' &&
+			value.length >= 0 &&
+			toStr.call(value.callee) === '[object Function]';
+	}
+	return isArgs;
+};
+
+
+/***/ }),
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1910,7 +1913,7 @@ var objectKeys = Object.keys || function (obj) {
 
 
 /***/ }),
-/* 33 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1950,7 +1953,7 @@ module.exports = EventBus;
 
 
 /***/ }),
-/* 34 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1966,27 +1969,36 @@ module.exports = {
 
 
 /***/ }),
-/* 35 */
+/* 28 */
 /***/ (function(module, exports) {
 
-module.exports = "0.33.0";
+module.exports = "0.37.1";
 
 
 /***/ }),
-/* 36 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
+
 module.exports = function parseAlgoliaClientVersion(agent) {
-  var parsed = agent.match(/Algolia for vanilla JavaScript (\d+\.)(\d+\.)(\d+)/);
-  if (parsed) return [parsed[1], parsed[2], parsed[3]];
+  var parsed =
+    // User agent for algoliasearch >= 3.33.0
+    agent.match(/Algolia for JavaScript \((\d+\.)(\d+\.)(\d+)\)/) ||
+    // User agent for algoliasearch < 3.33.0
+    agent.match(/Algolia for vanilla JavaScript (\d+\.)(\d+\.)(\d+)/);
+
+  if (parsed) {
+    return [parsed[1], parsed[2], parsed[3]];
+  }
+
   return undefined;
 };
 
 
 /***/ }),
-/* 37 */
+/* 30 */
 /***/ (function(module, exports) {
 
 // polyfill for navigator.language (IE <= 10)
@@ -2005,9 +2017,10 @@ if (!('language' in navigator)) {
 }
 
 /***/ }),
-/* 38 */
-/***/ (function(module, exports) {
+/* 31 */
+/***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -2029,9 +2042,39 @@ if (!('language' in navigator)) {
 // OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
 // USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+
+
+var R = typeof Reflect === 'object' ? Reflect : null
+var ReflectApply = R && typeof R.apply === 'function'
+  ? R.apply
+  : function ReflectApply(target, receiver, args) {
+    return Function.prototype.apply.call(target, receiver, args);
+  }
+
+var ReflectOwnKeys
+if (R && typeof R.ownKeys === 'function') {
+  ReflectOwnKeys = R.ownKeys
+} else if (Object.getOwnPropertySymbols) {
+  ReflectOwnKeys = function ReflectOwnKeys(target) {
+    return Object.getOwnPropertyNames(target)
+      .concat(Object.getOwnPropertySymbols(target));
+  };
+} else {
+  ReflectOwnKeys = function ReflectOwnKeys(target) {
+    return Object.getOwnPropertyNames(target);
+  };
+}
+
+function ProcessEmitWarning(warning) {
+  if (console && console.warn) console.warn(warning);
+}
+
+var NumberIsNaN = Number.isNaN || function NumberIsNaN(value) {
+  return value !== value;
+}
+
 function EventEmitter() {
-  this._events = this._events || {};
-  this._maxListeners = this._maxListeners || undefined;
+  EventEmitter.init.call(this);
 }
 module.exports = EventEmitter;
 
@@ -2039,341 +2082,451 @@ module.exports = EventEmitter;
 EventEmitter.EventEmitter = EventEmitter;
 
 EventEmitter.prototype._events = undefined;
+EventEmitter.prototype._eventsCount = 0;
 EventEmitter.prototype._maxListeners = undefined;
 
 // By default EventEmitters will print a warning if more than 10 listeners are
 // added to it. This is a useful default which helps finding memory leaks.
-EventEmitter.defaultMaxListeners = 10;
+var defaultMaxListeners = 10;
+
+function checkListener(listener) {
+  if (typeof listener !== 'function') {
+    throw new TypeError('The "listener" argument must be of type Function. Received type ' + typeof listener);
+  }
+}
+
+Object.defineProperty(EventEmitter, 'defaultMaxListeners', {
+  enumerable: true,
+  get: function() {
+    return defaultMaxListeners;
+  },
+  set: function(arg) {
+    if (typeof arg !== 'number' || arg < 0 || NumberIsNaN(arg)) {
+      throw new RangeError('The value of "defaultMaxListeners" is out of range. It must be a non-negative number. Received ' + arg + '.');
+    }
+    defaultMaxListeners = arg;
+  }
+});
+
+EventEmitter.init = function() {
+
+  if (this._events === undefined ||
+      this._events === Object.getPrototypeOf(this)._events) {
+    this._events = Object.create(null);
+    this._eventsCount = 0;
+  }
+
+  this._maxListeners = this._maxListeners || undefined;
+};
 
 // Obviously not all Emitters should be limited to 10. This function allows
 // that to be increased. Set to zero for unlimited.
-EventEmitter.prototype.setMaxListeners = function(n) {
-  if (!isNumber(n) || n < 0 || isNaN(n))
-    throw TypeError('n must be a positive number');
+EventEmitter.prototype.setMaxListeners = function setMaxListeners(n) {
+  if (typeof n !== 'number' || n < 0 || NumberIsNaN(n)) {
+    throw new RangeError('The value of "n" is out of range. It must be a non-negative number. Received ' + n + '.');
+  }
   this._maxListeners = n;
   return this;
 };
 
-EventEmitter.prototype.emit = function(type) {
-  var er, handler, len, args, i, listeners;
+function _getMaxListeners(that) {
+  if (that._maxListeners === undefined)
+    return EventEmitter.defaultMaxListeners;
+  return that._maxListeners;
+}
 
-  if (!this._events)
-    this._events = {};
+EventEmitter.prototype.getMaxListeners = function getMaxListeners() {
+  return _getMaxListeners(this);
+};
 
-  // If there is no 'error' event listener then throw.
-  if (type === 'error') {
-    if (!this._events.error ||
-        (isObject(this._events.error) && !this._events.error.length)) {
-      er = arguments[1];
-      if (er instanceof Error) {
-        throw er; // Unhandled 'error' event
-      } else {
-        // At least give some kind of context to the user
-        var err = new Error('Uncaught, unspecified "error" event. (' + er + ')');
-        err.context = er;
-        throw err;
-      }
-    }
-  }
+EventEmitter.prototype.emit = function emit(type) {
+  var args = [];
+  for (var i = 1; i < arguments.length; i++) args.push(arguments[i]);
+  var doError = (type === 'error');
 
-  handler = this._events[type];
-
-  if (isUndefined(handler))
+  var events = this._events;
+  if (events !== undefined)
+    doError = (doError && events.error === undefined);
+  else if (!doError)
     return false;
 
-  if (isFunction(handler)) {
-    switch (arguments.length) {
-      // fast cases
-      case 1:
-        handler.call(this);
-        break;
-      case 2:
-        handler.call(this, arguments[1]);
-        break;
-      case 3:
-        handler.call(this, arguments[1], arguments[2]);
-        break;
-      // slower
-      default:
-        args = Array.prototype.slice.call(arguments, 1);
-        handler.apply(this, args);
+  // If there is no 'error' event listener then throw.
+  if (doError) {
+    var er;
+    if (args.length > 0)
+      er = args[0];
+    if (er instanceof Error) {
+      // Note: The comments on the `throw` lines are intentional, they show
+      // up in Node's output if this results in an unhandled exception.
+      throw er; // Unhandled 'error' event
     }
-  } else if (isObject(handler)) {
-    args = Array.prototype.slice.call(arguments, 1);
-    listeners = handler.slice();
-    len = listeners.length;
-    for (i = 0; i < len; i++)
-      listeners[i].apply(this, args);
+    // At least give some kind of context to the user
+    var err = new Error('Unhandled error.' + (er ? ' (' + er.message + ')' : ''));
+    err.context = er;
+    throw err; // Unhandled 'error' event
+  }
+
+  var handler = events[type];
+
+  if (handler === undefined)
+    return false;
+
+  if (typeof handler === 'function') {
+    ReflectApply(handler, this, args);
+  } else {
+    var len = handler.length;
+    var listeners = arrayClone(handler, len);
+    for (var i = 0; i < len; ++i)
+      ReflectApply(listeners[i], this, args);
   }
 
   return true;
 };
 
-EventEmitter.prototype.addListener = function(type, listener) {
+function _addListener(target, type, listener, prepend) {
   var m;
+  var events;
+  var existing;
 
-  if (!isFunction(listener))
-    throw TypeError('listener must be a function');
+  checkListener(listener);
 
-  if (!this._events)
-    this._events = {};
+  events = target._events;
+  if (events === undefined) {
+    events = target._events = Object.create(null);
+    target._eventsCount = 0;
+  } else {
+    // To avoid recursion in the case that type === "newListener"! Before
+    // adding it to the listeners, first emit "newListener".
+    if (events.newListener !== undefined) {
+      target.emit('newListener', type,
+                  listener.listener ? listener.listener : listener);
 
-  // To avoid recursion in the case that type === "newListener"! Before
-  // adding it to the listeners, first emit "newListener".
-  if (this._events.newListener)
-    this.emit('newListener', type,
-              isFunction(listener.listener) ?
-              listener.listener : listener);
+      // Re-assign `events` because a newListener handler could have caused the
+      // this._events to be assigned to a new object
+      events = target._events;
+    }
+    existing = events[type];
+  }
 
-  if (!this._events[type])
+  if (existing === undefined) {
     // Optimize the case of one listener. Don't need the extra array object.
-    this._events[type] = listener;
-  else if (isObject(this._events[type]))
-    // If we've already got an array, just append.
-    this._events[type].push(listener);
-  else
-    // Adding the second element, need to change to array.
-    this._events[type] = [this._events[type], listener];
-
-  // Check for listener leak
-  if (isObject(this._events[type]) && !this._events[type].warned) {
-    if (!isUndefined(this._maxListeners)) {
-      m = this._maxListeners;
+    existing = events[type] = listener;
+    ++target._eventsCount;
+  } else {
+    if (typeof existing === 'function') {
+      // Adding the second element, need to change to array.
+      existing = events[type] =
+        prepend ? [listener, existing] : [existing, listener];
+      // If we've already got an array, just append.
+    } else if (prepend) {
+      existing.unshift(listener);
     } else {
-      m = EventEmitter.defaultMaxListeners;
+      existing.push(listener);
     }
 
-    if (m && m > 0 && this._events[type].length > m) {
-      this._events[type].warned = true;
-      console.error('(node) warning: possible EventEmitter memory ' +
-                    'leak detected. %d listeners added. ' +
-                    'Use emitter.setMaxListeners() to increase limit.',
-                    this._events[type].length);
-      if (typeof console.trace === 'function') {
-        // not supported in IE 10
-        console.trace();
-      }
+    // Check for listener leak
+    m = _getMaxListeners(target);
+    if (m > 0 && existing.length > m && !existing.warned) {
+      existing.warned = true;
+      // No error code for this since it is a Warning
+      // eslint-disable-next-line no-restricted-syntax
+      var w = new Error('Possible EventEmitter memory leak detected. ' +
+                          existing.length + ' ' + String(type) + ' listeners ' +
+                          'added. Use emitter.setMaxListeners() to ' +
+                          'increase limit');
+      w.name = 'MaxListenersExceededWarning';
+      w.emitter = target;
+      w.type = type;
+      w.count = existing.length;
+      ProcessEmitWarning(w);
     }
   }
 
-  return this;
+  return target;
+}
+
+EventEmitter.prototype.addListener = function addListener(type, listener) {
+  return _addListener(this, type, listener, false);
 };
 
 EventEmitter.prototype.on = EventEmitter.prototype.addListener;
 
-EventEmitter.prototype.once = function(type, listener) {
-  if (!isFunction(listener))
-    throw TypeError('listener must be a function');
+EventEmitter.prototype.prependListener =
+    function prependListener(type, listener) {
+      return _addListener(this, type, listener, true);
+    };
 
-  var fired = false;
-
-  function g() {
-    this.removeListener(type, g);
-
-    if (!fired) {
-      fired = true;
-      listener.apply(this, arguments);
-    }
-  }
-
-  g.listener = listener;
-  this.on(type, g);
-
-  return this;
-};
-
-// emits a 'removeListener' event iff the listener was removed
-EventEmitter.prototype.removeListener = function(type, listener) {
-  var list, position, length, i;
-
-  if (!isFunction(listener))
-    throw TypeError('listener must be a function');
-
-  if (!this._events || !this._events[type])
-    return this;
-
-  list = this._events[type];
-  length = list.length;
-  position = -1;
-
-  if (list === listener ||
-      (isFunction(list.listener) && list.listener === listener)) {
-    delete this._events[type];
-    if (this._events.removeListener)
-      this.emit('removeListener', type, listener);
-
-  } else if (isObject(list)) {
-    for (i = length; i-- > 0;) {
-      if (list[i] === listener ||
-          (list[i].listener && list[i].listener === listener)) {
-        position = i;
-        break;
-      }
-    }
-
-    if (position < 0)
-      return this;
-
-    if (list.length === 1) {
-      list.length = 0;
-      delete this._events[type];
-    } else {
-      list.splice(position, 1);
-    }
-
-    if (this._events.removeListener)
-      this.emit('removeListener', type, listener);
-  }
-
-  return this;
-};
-
-EventEmitter.prototype.removeAllListeners = function(type) {
-  var key, listeners;
-
-  if (!this._events)
-    return this;
-
-  // not listening for removeListener, no need to emit
-  if (!this._events.removeListener) {
+function onceWrapper() {
+  if (!this.fired) {
+    this.target.removeListener(this.type, this.wrapFn);
+    this.fired = true;
     if (arguments.length === 0)
-      this._events = {};
-    else if (this._events[type])
-      delete this._events[type];
-    return this;
+      return this.listener.call(this.target);
+    return this.listener.apply(this.target, arguments);
   }
+}
 
-  // emit removeListener for all listeners on all events
-  if (arguments.length === 0) {
-    for (key in this._events) {
-      if (key === 'removeListener') continue;
-      this.removeAllListeners(key);
-    }
-    this.removeAllListeners('removeListener');
-    this._events = {};
-    return this;
-  }
+function _onceWrap(target, type, listener) {
+  var state = { fired: false, wrapFn: undefined, target: target, type: type, listener: listener };
+  var wrapped = onceWrapper.bind(state);
+  wrapped.listener = listener;
+  state.wrapFn = wrapped;
+  return wrapped;
+}
 
-  listeners = this._events[type];
-
-  if (isFunction(listeners)) {
-    this.removeListener(type, listeners);
-  } else if (listeners) {
-    // LIFO order
-    while (listeners.length)
-      this.removeListener(type, listeners[listeners.length - 1]);
-  }
-  delete this._events[type];
-
+EventEmitter.prototype.once = function once(type, listener) {
+  checkListener(listener);
+  this.on(type, _onceWrap(this, type, listener));
   return this;
 };
 
-EventEmitter.prototype.listeners = function(type) {
-  var ret;
-  if (!this._events || !this._events[type])
-    ret = [];
-  else if (isFunction(this._events[type]))
-    ret = [this._events[type]];
-  else
-    ret = this._events[type].slice();
-  return ret;
+EventEmitter.prototype.prependOnceListener =
+    function prependOnceListener(type, listener) {
+      checkListener(listener);
+      this.prependListener(type, _onceWrap(this, type, listener));
+      return this;
+    };
+
+// Emits a 'removeListener' event if and only if the listener was removed.
+EventEmitter.prototype.removeListener =
+    function removeListener(type, listener) {
+      var list, events, position, i, originalListener;
+
+      checkListener(listener);
+
+      events = this._events;
+      if (events === undefined)
+        return this;
+
+      list = events[type];
+      if (list === undefined)
+        return this;
+
+      if (list === listener || list.listener === listener) {
+        if (--this._eventsCount === 0)
+          this._events = Object.create(null);
+        else {
+          delete events[type];
+          if (events.removeListener)
+            this.emit('removeListener', type, list.listener || listener);
+        }
+      } else if (typeof list !== 'function') {
+        position = -1;
+
+        for (i = list.length - 1; i >= 0; i--) {
+          if (list[i] === listener || list[i].listener === listener) {
+            originalListener = list[i].listener;
+            position = i;
+            break;
+          }
+        }
+
+        if (position < 0)
+          return this;
+
+        if (position === 0)
+          list.shift();
+        else {
+          spliceOne(list, position);
+        }
+
+        if (list.length === 1)
+          events[type] = list[0];
+
+        if (events.removeListener !== undefined)
+          this.emit('removeListener', type, originalListener || listener);
+      }
+
+      return this;
+    };
+
+EventEmitter.prototype.off = EventEmitter.prototype.removeListener;
+
+EventEmitter.prototype.removeAllListeners =
+    function removeAllListeners(type) {
+      var listeners, events, i;
+
+      events = this._events;
+      if (events === undefined)
+        return this;
+
+      // not listening for removeListener, no need to emit
+      if (events.removeListener === undefined) {
+        if (arguments.length === 0) {
+          this._events = Object.create(null);
+          this._eventsCount = 0;
+        } else if (events[type] !== undefined) {
+          if (--this._eventsCount === 0)
+            this._events = Object.create(null);
+          else
+            delete events[type];
+        }
+        return this;
+      }
+
+      // emit removeListener for all listeners on all events
+      if (arguments.length === 0) {
+        var keys = Object.keys(events);
+        var key;
+        for (i = 0; i < keys.length; ++i) {
+          key = keys[i];
+          if (key === 'removeListener') continue;
+          this.removeAllListeners(key);
+        }
+        this.removeAllListeners('removeListener');
+        this._events = Object.create(null);
+        this._eventsCount = 0;
+        return this;
+      }
+
+      listeners = events[type];
+
+      if (typeof listeners === 'function') {
+        this.removeListener(type, listeners);
+      } else if (listeners !== undefined) {
+        // LIFO order
+        for (i = listeners.length - 1; i >= 0; i--) {
+          this.removeListener(type, listeners[i]);
+        }
+      }
+
+      return this;
+    };
+
+function _listeners(target, type, unwrap) {
+  var events = target._events;
+
+  if (events === undefined)
+    return [];
+
+  var evlistener = events[type];
+  if (evlistener === undefined)
+    return [];
+
+  if (typeof evlistener === 'function')
+    return unwrap ? [evlistener.listener || evlistener] : [evlistener];
+
+  return unwrap ?
+    unwrapListeners(evlistener) : arrayClone(evlistener, evlistener.length);
+}
+
+EventEmitter.prototype.listeners = function listeners(type) {
+  return _listeners(this, type, true);
 };
 
-EventEmitter.prototype.listenerCount = function(type) {
-  if (this._events) {
-    var evlistener = this._events[type];
-
-    if (isFunction(evlistener))
-      return 1;
-    else if (evlistener)
-      return evlistener.length;
-  }
-  return 0;
+EventEmitter.prototype.rawListeners = function rawListeners(type) {
+  return _listeners(this, type, false);
 };
 
 EventEmitter.listenerCount = function(emitter, type) {
-  return emitter.listenerCount(type);
+  if (typeof emitter.listenerCount === 'function') {
+    return emitter.listenerCount(type);
+  } else {
+    return listenerCount.call(emitter, type);
+  }
 };
 
-function isFunction(arg) {
-  return typeof arg === 'function';
+EventEmitter.prototype.listenerCount = listenerCount;
+function listenerCount(type) {
+  var events = this._events;
+
+  if (events !== undefined) {
+    var evlistener = events[type];
+
+    if (typeof evlistener === 'function') {
+      return 1;
+    } else if (evlistener !== undefined) {
+      return evlistener.length;
+    }
+  }
+
+  return 0;
 }
 
-function isNumber(arg) {
-  return typeof arg === 'number';
+EventEmitter.prototype.eventNames = function eventNames() {
+  return this._eventsCount > 0 ? ReflectOwnKeys(this._events) : [];
+};
+
+function arrayClone(arr, n) {
+  var copy = new Array(n);
+  for (var i = 0; i < n; ++i)
+    copy[i] = arr[i];
+  return copy;
 }
 
-function isObject(arg) {
-  return typeof arg === 'object' && arg !== null;
+function spliceOne(list, index) {
+  for (; index + 1 < list.length; index++)
+    list[index] = list[index + 1];
+  list.pop();
 }
 
-function isUndefined(arg) {
-  return arg === void 0;
+function unwrapListeners(arr) {
+  var ret = new Array(arr.length);
+  for (var i = 0; i < ret.length; ++i) {
+    ret[i] = arr[i].listener || arr[i];
+  }
+  return ret;
 }
 
 
 /***/ }),
-/* 39 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-module.exports = __webpack_require__(62);
+module.exports = __webpack_require__(54);
 
 
 /***/ }),
-/* 40 */
-/***/ (function(module, exports) {
-
-module.exports = "<svg width=\"12\" height=\"12\" viewBox=\"0 0 12 12\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M.566 1.698L0 1.13 1.132 0l.565.566L6 4.868 10.302.566 10.868 0 12 1.132l-.566.565L7.132 6l4.302 4.3.566.568L10.868 12l-.565-.566L6 7.132l-4.3 4.302L1.13 12 0 10.868l.566-.565L4.868 6 .566 1.698z\"/></svg>\n"
-
-/***/ }),
-/* 41 */
+/* 33 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+// ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
 
-// EXTERNAL MODULE: ./node_modules/node-libs-browser/node_modules/events/events.js
-var events = __webpack_require__(38);
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, "default", function() { return /* binding */ places_places; });
+
+// EXTERNAL MODULE: ./node_modules/events/events.js
+var events = __webpack_require__(31);
 var events_default = /*#__PURE__*/__webpack_require__.n(events);
 
 // EXTERNAL MODULE: ./node_modules/algoliasearch/src/browser/builds/algoliasearchLite.js
-var algoliasearchLite = __webpack_require__(28);
+var algoliasearchLite = __webpack_require__(20);
 var algoliasearchLite_default = /*#__PURE__*/__webpack_require__.n(algoliasearchLite);
 
 // EXTERNAL MODULE: ./node_modules/autocomplete.js/index.js
-var autocomplete_js = __webpack_require__(39);
+var autocomplete_js = __webpack_require__(32);
 var autocomplete_js_default = /*#__PURE__*/__webpack_require__.n(autocomplete_js);
 
 // EXTERNAL MODULE: ./src/navigatorLanguage.js
-var navigatorLanguage = __webpack_require__(37);
+var navigatorLanguage = __webpack_require__(30);
 
 // EXTERNAL MODULE: ./src/createAutocompleteDataset.js + 1 modules
-var createAutocompleteDataset = __webpack_require__(27);
+var createAutocompleteDataset = __webpack_require__(19);
 
-// EXTERNAL MODULE: ./src/icons/clear.svg
-var icons_clear = __webpack_require__(40);
-var clear_default = /*#__PURE__*/__webpack_require__.n(icons_clear);
-
+// CONCATENATED MODULE: ./src/icons/clear.svg
+/* harmony default export */ var icons_clear = ("<svg width=\"12\" height=\"12\" viewBox=\"0 0 12 12\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M.566 1.698L0 1.13 1.132 0l.565.566L6 4.868 10.302.566 10.868 0 12 1.132l-.566.565L7.132 6l4.302 4.3.566.568L10.868 12l-.565-.566L6 7.132l-4.3 4.302L1.13 12 0 10.868l.566-.565L4.868 6 .566 1.698z\"/></svg>\n");
 // EXTERNAL MODULE: ./src/icons/address.svg
 var address = __webpack_require__(7);
-var address_default = /*#__PURE__*/__webpack_require__.n(address);
 
 // EXTERNAL MODULE: ./src/places.css
-var places = __webpack_require__(25);
-var places_default = /*#__PURE__*/__webpack_require__.n(places);
+var places = __webpack_require__(15);
 
 // EXTERNAL MODULE: ./node_modules/insert-css/index.js
-var insert_css = __webpack_require__(26);
+var insert_css = __webpack_require__(18);
 var insert_css_default = /*#__PURE__*/__webpack_require__.n(insert_css);
 
 // CONCATENATED MODULE: ./src/errors.js
 /* harmony default export */ var errors = ({
   multiContainers: "Algolia Places: 'container' must point to a single <input> element.\nExample: instantiate the library twice if you want to bind two <inputs>.\n\nSee https://community.algolia.com/places/documentation.html#api-options-container",
   badContainer: "Algolia Places: 'container' must point to an <input> element.\n\nSee https://community.algolia.com/places/documentation.html#api-options-container",
-  rateLimitReached: "Algolia Places: Current rate limit reached.\n\nSign up for a free 100,000 queries/month account at\nhttps://www.algolia.com/users/sign_up/places.\n\nOr upgrade your 100,000 queries/month plan by contacting us at\nhttps://community.algolia.com/places/contact.html."
+  rateLimitReached: "Algolia Places: Current rate limit reached.\n\nSign up for a free 100,000 queries/month account at\nhttps://www.algolia.com/users/sign_up/places.\n\nOr upgrade your 100,000 queries/month plan by contacting us at\nhttps://community.algolia.com/places/contact.html.",
+  invalidCredentials: "The APP ID or API key provided is invalid.",
+  invalidAppId: "Your APP ID is invalid. A Places APP ID starts with 'pl'. You must create a valid Places app first.\n\nCreate a free Places app here: https://www.algolia.com/users/sign_up/places"
 });
 // EXTERNAL MODULE: ./src/configure/index.js
 var configure = __webpack_require__(1);
@@ -2384,11 +2537,13 @@ var formatHit = __webpack_require__(9);
 // EXTERNAL MODULE: ./src/version.js
 var version = __webpack_require__(6);
 
-// EXTERNAL MODULE: ./src/defaultTemplates.js + 2 modules
+// EXTERNAL MODULE: ./src/defaultTemplates.js + 10 modules
 var defaultTemplates = __webpack_require__(8);
 
 // CONCATENATED MODULE: ./src/createReverseGeocodingSource.js
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -2441,7 +2596,8 @@ var createReverseGeocodingSource_createReverseGeocodingSource = function createR
       onError = _ref$onError === void 0 ? function (e) {
     throw e;
   } : _ref$onError,
-      onRateLimitReached = _ref.onRateLimitReached;
+      onRateLimitReached = _ref.onRateLimitReached,
+      onInvalidCredentials = _ref.onInvalidCredentials;
   var placesClient = algoliasearch.initPlaces(appId, apiKey, clientOptions);
   placesClient.as.addAlgoliaAgent("Algolia Places ".concat(version["default"]));
   var configuration = Object(configure["a" /* default */])({
@@ -2454,7 +2610,8 @@ var createReverseGeocodingSource_createReverseGeocodingSource = function createR
     formatInputValue: formatInputValue,
     onHits: onHits,
     onError: onError,
-    onRateLimitReached: onRateLimitReached
+    onRateLimitReached: onRateLimitReached,
+    onInvalidCredentials: onInvalidCredentials
   });
   var params = filterApplicableParams(configuration.params);
   var controls = configuration.controls;
@@ -2485,8 +2642,11 @@ var createReverseGeocodingSource_createReverseGeocodingSource = function createR
         rawAnswer: content
       });
       return hits;
-    }).then(cb).catch(function (e) {
-      if (e.statusCode === 429) {
+    }).then(cb)["catch"](function (e) {
+      if (e.statusCode === 403 && e.message === 'Invalid Application-ID or API key') {
+        controls.onInvalidCredentials();
+        return;
+      } else if (e.statusCode === 429) {
         controls.onRateLimitReached();
         return;
       }
@@ -2496,7 +2656,7 @@ var createReverseGeocodingSource_createReverseGeocodingSource = function createR
   };
 
   searcher.configure = function (partial) {
-    var updated = Object(configure["a" /* default */])(_objectSpread({}, params, controls, partial));
+    var updated = Object(configure["a" /* default */])(_objectSpread({}, params, {}, controls, {}, partial));
     params = filterApplicableParams(updated.params);
     controls = updated.controls;
     return searcher;
@@ -2507,11 +2667,23 @@ var createReverseGeocodingSource_createReverseGeocodingSource = function createR
 
 /* harmony default export */ var src_createReverseGeocodingSource = (createReverseGeocodingSource_createReverseGeocodingSource);
 // CONCATENATED MODULE: ./src/places.js
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return places_places; });
-function places_objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { places_defineProperty(target, key, source[key]); }); } return target; }
+function places_ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function places_objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { places_ownKeys(Object(source), true).forEach(function (key) { places_defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { places_ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function places_defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(n); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
@@ -2521,14 +2693,28 @@ function places_defineProperty(obj, key, value) { if (key in obj) { Object.defin
 
 
 
-insert_css_default()(places_default.a, {
+
+insert_css_default()(places["a" /* default */], {
   prepend: true
 });
 
 
+
+var applyAttributes = function applyAttributes(elt, attrs) {
+  Object.entries(attrs).forEach(function (_ref) {
+    var _ref2 = _slicedToArray(_ref, 2),
+        name = _ref2[0],
+        value = _ref2[1];
+
+    elt.setAttribute(name, "".concat(value));
+  });
+  return elt;
+};
+
 function places_places(options) {
   var container = options.container,
       style = options.style,
+      accessibility = options.accessibility,
       _options$autocomplete = options.autocompleteOptions,
       userAutocompleteOptions = _options$autocomplete === void 0 ? {} : _options$autocomplete; // multiple DOM elements targeted
 
@@ -2571,10 +2757,10 @@ function places_places(options) {
 
   var autocompleteDataset = Object(createAutocompleteDataset["default"])(places_objectSpread({}, options, {
     algoliasearch: algoliasearchLite_default.a,
-    onHits: function onHits(_ref) {
-      var hits = _ref.hits,
-          rawAnswer = _ref.rawAnswer,
-          query = _ref.query;
+    onHits: function onHits(_ref3) {
+      var hits = _ref3.hits,
+          rawAnswer = _ref3.rawAnswer,
+          query = _ref3.query;
       return placesInstance.emit('suggestions', {
         rawAnswer: rawAnswer,
         query: query,
@@ -2588,7 +2774,7 @@ function places_places(options) {
       var listeners = placesInstance.listenerCount('limit');
 
       if (listeners === 0) {
-        console.log(errors.rateLimitReached); // eslint-disable-line
+        console.log(errors.rateLimitReached); // eslint-disable-line no-console
 
         return;
       }
@@ -2596,6 +2782,13 @@ function places_places(options) {
       placesInstance.emit('limit', {
         message: errors.rateLimitReached
       });
+    },
+    onInvalidCredentials: function onInvalidCredentials() {
+      if (options && options.appId && options.appId.startsWith('pl')) {
+        console.error(errors.invalidCredentials); // eslint-disable-line no-console
+      } else {
+        console.error(errors.invalidAppId); // eslint-disable-line no-console
+      }
     },
     container: undefined
   }));
@@ -2623,17 +2816,27 @@ function places_places(options) {
   var clear = document.createElement('button');
   clear.setAttribute('type', 'button');
   clear.setAttribute('aria-label', 'clear');
+
+  if (accessibility && accessibility.clearButton && accessibility.clearButton instanceof Object) {
+    applyAttributes(clear, accessibility.clearButton);
+  }
+
   clear.classList.add("".concat(prefix, "-input-icon"));
   clear.classList.add("".concat(prefix, "-icon-clear"));
-  clear.innerHTML = clear_default.a;
+  clear.innerHTML = icons_clear;
   autocompleteContainer.appendChild(clear);
   clear.style.display = 'none';
   var pin = document.createElement('button');
   pin.setAttribute('type', 'button');
   pin.setAttribute('aria-label', 'focus');
+
+  if (accessibility && accessibility.pinButton && accessibility.pinButton instanceof Object) {
+    applyAttributes(pin, accessibility.pinButton);
+  }
+
   pin.classList.add("".concat(prefix, "-input-icon"));
   pin.classList.add("".concat(prefix, "-icon-pin"));
-  pin.innerHTML = address_default.a;
+  pin.innerHTML = address["a" /* default */];
   autocompleteContainer.appendChild(pin);
   pin.addEventListener('click', function () {
     autocompleteDataset.source.configure({
@@ -2669,7 +2872,7 @@ function places_places(options) {
   };
 
   autocompleteContainer.querySelector(".".concat(prefix, "-input")).addEventListener('input', inputListener);
-  var autocompleteIsomorphicMethods = ['open', 'close', 'getVal'];
+  var autocompleteIsomorphicMethods = ['open', 'close'];
   autocompleteIsomorphicMethods.forEach(function (methodName) {
     placesInstance[methodName] = function () {
       var _autocompleteInstance;
@@ -2677,6 +2880,10 @@ function places_places(options) {
       (_autocompleteInstance = autocompleteInstance.autocomplete)[methodName].apply(_autocompleteInstance, arguments);
     };
   });
+
+  placesInstance.getVal = function () {
+    return autocompleteInstance.val();
+  };
 
   placesInstance.destroy = function () {
     var _autocompleteInstance2;
@@ -2691,16 +2898,33 @@ function places_places(options) {
 
     previousQuery = arguments.length <= 0 ? undefined : arguments[0];
 
+    if (previousQuery === '') {
+      pin.style.display = '';
+      clear.style.display = 'none';
+    } else {
+      clear.style.display = '';
+      pin.style.display = 'none';
+    }
+
     (_autocompleteInstance3 = autocompleteInstance.autocomplete).setVal.apply(_autocompleteInstance3, arguments);
   };
 
   placesInstance.autocomplete = autocompleteInstance;
 
+  placesInstance.search = function () {
+    var query = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+    return new Promise(function (resolve) {
+      autocompleteDataset.source(query, resolve);
+    });
+  };
+
   placesInstance.configure = function (configuration) {
-    var safeConfig = Object.assign({}, configuration);
+    var safeConfig = places_objectSpread({}, configuration);
+
     delete safeConfig.onHits;
     delete safeConfig.onError;
     delete safeConfig.onRateLimitReached;
+    delete safeConfig.onInvalidCredentials;
     delete safeConfig.templates;
     autocompleteDataset.source.configure(safeConfig);
     return placesInstance;
@@ -2709,10 +2933,10 @@ function places_places(options) {
   placesInstance.reverse = src_createReverseGeocodingSource(places_objectSpread({}, options, {
     algoliasearch: algoliasearchLite_default.a,
     formatInputValue: (options.templates || {}).value,
-    onHits: function onHits(_ref2) {
-      var hits = _ref2.hits,
-          rawAnswer = _ref2.rawAnswer,
-          query = _ref2.query;
+    onHits: function onHits(_ref4) {
+      var hits = _ref4.hits,
+          rawAnswer = _ref4.rawAnswer,
+          query = _ref4.query;
       return placesInstance.emit('reverse', {
         rawAnswer: rawAnswer,
         query: query,
@@ -2726,7 +2950,7 @@ function places_places(options) {
       var listeners = placesInstance.listenerCount('limit');
 
       if (listeners === 0) {
-        console.log(errors.rateLimitReached); // eslint-disable-line
+        console.log(errors.rateLimitReached); // eslint-disable-line no-console
 
         return;
       }
@@ -2734,21 +2958,28 @@ function places_places(options) {
       placesInstance.emit('limit', {
         message: errors.rateLimitReached
       });
+    },
+    onInvalidCredentials: function onInvalidCredentials() {
+      if (options && options.appId && options.appId.startsWith('pl')) {
+        console.error(errors.invalidCredentials); // eslint-disable-line no-console
+      } else {
+        console.error(errors.invalidAppId); // eslint-disable-line no-console
+      }
     }
   }));
   return placesInstance;
 }
 
 /***/ }),
-/* 42 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(process) {module.exports = AlgoliaSearchCore;
 
 var errors = __webpack_require__(11);
-var exitPromise = __webpack_require__(43);
-var IndexCore = __webpack_require__(44);
-var store = __webpack_require__(50);
+var exitPromise = __webpack_require__(35);
+var IndexCore = __webpack_require__(36);
+var store = __webpack_require__(42);
 
 // We will always put the API KEY in the JSON body in case of too long API KEY,
 // to avoid query string being too long and failing in various conditions (our server limit, browser limit,
@@ -2916,8 +3147,10 @@ AlgoliaSearchCore.prototype.unsetExtraHeader = function(name) {
 * @param algoliaAgent the agent to add
 */
 AlgoliaSearchCore.prototype.addAlgoliaAgent = function(algoliaAgent) {
-  if (this._ua.indexOf(';' + algoliaAgent) === -1) {
-    this._ua += ';' + algoliaAgent;
+  var algoliaAgentWithDelimiter = '; ' + algoliaAgent;
+
+  if (this._ua.indexOf(algoliaAgentWithDelimiter) === -1) {
+    this._ua += algoliaAgentWithDelimiter;
   }
 };
 
@@ -3174,7 +3407,7 @@ AlgoliaSearchCore.prototype._jsonRequest = function(initialOpts) {
         return client._promise.reject(err);
       }
 
-      // When a timeout occured, retry by raising timeout
+      // When a timeout occurred, retry by raising timeout
       if (err instanceof errors.RequestTimeout) {
         return retryRequestWithHigherTimeout();
       }
@@ -3313,7 +3546,7 @@ AlgoliaSearchCore.prototype._computeRequestHeaders = function(options) {
   var forEach = __webpack_require__(3);
 
   var ua = options.additionalUA ?
-    this._ua + ';' + options.additionalUA :
+    this._ua + '; ' + options.additionalUA :
     this._ua;
 
   var requestHeaders = {
@@ -3465,7 +3698,7 @@ AlgoliaSearchCore.prototype.searchForFacetValues = function(queries) {
     }
 
     var clone = __webpack_require__(4);
-    var omit = __webpack_require__(31);
+    var omit = __webpack_require__(23);
 
     var indexName = query.indexName;
     var params = query.params;
@@ -3713,7 +3946,7 @@ function removeCredentials(headers) {
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(10)))
 
 /***/ }),
-/* 43 */
+/* 35 */
 /***/ (function(module, exports) {
 
 // Parse cloud does not supports setTimeout
@@ -3726,12 +3959,12 @@ module.exports = function exitPromise(fn, _setTimeout) {
 
 
 /***/ }),
-/* 44 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var buildSearchMethod = __webpack_require__(30);
-var deprecate = __webpack_require__(45);
-var deprecatedMessage = __webpack_require__(46);
+var buildSearchMethod = __webpack_require__(22);
+var deprecate = __webpack_require__(37);
+var deprecatedMessage = __webpack_require__(38);
 
 module.exports = IndexCore;
 
@@ -3889,7 +4122,7 @@ IndexCore.prototype.similarSearch = deprecate(
 * @see {@link https://www.algolia.com/doc/rest_api#Browse|Algolia REST API Documentation}
 */
 IndexCore.prototype.browse = function(query, queryParameters, callback) {
-  var merge = __webpack_require__(47);
+  var merge = __webpack_require__(39);
 
   var indexObj = this;
 
@@ -3985,7 +4218,7 @@ IndexCore.prototype.browseFrom = function(cursor, callback) {
 */
 IndexCore.prototype.searchForFacetValues = function(params, callback) {
   var clone = __webpack_require__(4);
-  var omit = __webpack_require__(31);
+  var omit = __webpack_require__(23);
   var usage = 'Usage: index.searchForFacetValues({facetName, facetQuery, ...params}[, callback])';
 
   if (params.facetName === undefined || params.facetQuery === undefined) {
@@ -4039,7 +4272,7 @@ IndexCore.prototype._search = function(params, url, callback, additionalUA) {
 * @param attrs (optional) if set, contains the array of attribute names to retrieve
 * @param callback (optional) the result callback called with two arguments
 *  error: null or Error('message')
-*  content: the object to retrieve or the error message if a failure occured
+*  content: the object to retrieve or the error message if a failure occurred
 */
 IndexCore.prototype.getObject = function(objectID, attrs, callback) {
   var indexObj = this;
@@ -4121,7 +4354,7 @@ IndexCore.prototype.typeAheadValueOption = null;
 
 
 /***/ }),
-/* 45 */
+/* 37 */
 /***/ (function(module, exports) {
 
 module.exports = function deprecate(fn, message) {
@@ -4142,7 +4375,7 @@ module.exports = function deprecate(fn, message) {
 
 
 /***/ }),
-/* 46 */
+/* 38 */
 /***/ (function(module, exports) {
 
 module.exports = function deprecatedMessage(previousUsage, newUsage) {
@@ -4155,7 +4388,7 @@ module.exports = function deprecatedMessage(previousUsage, newUsage) {
 
 
 /***/ }),
-/* 47 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var foreach = __webpack_require__(3);
@@ -4180,142 +4413,33 @@ module.exports = function merge(destination/* , sources */) {
 
 
 /***/ }),
-/* 48 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-// modified from https://github.com/es-shims/es5-shim
-var has = Object.prototype.hasOwnProperty;
-var toStr = Object.prototype.toString;
 var slice = Array.prototype.slice;
-var isArgs = __webpack_require__(49);
-var isEnumerable = Object.prototype.propertyIsEnumerable;
-var hasDontEnumBug = !isEnumerable.call({ toString: null }, 'toString');
-var hasProtoEnumBug = isEnumerable.call(function () {}, 'prototype');
-var dontEnums = [
-	'toString',
-	'toLocaleString',
-	'valueOf',
-	'hasOwnProperty',
-	'isPrototypeOf',
-	'propertyIsEnumerable',
-	'constructor'
-];
-var equalsConstructorPrototype = function (o) {
-	var ctor = o.constructor;
-	return ctor && ctor.prototype === o;
-};
-var excludedKeys = {
-	$applicationCache: true,
-	$console: true,
-	$external: true,
-	$frame: true,
-	$frameElement: true,
-	$frames: true,
-	$innerHeight: true,
-	$innerWidth: true,
-	$outerHeight: true,
-	$outerWidth: true,
-	$pageXOffset: true,
-	$pageYOffset: true,
-	$parent: true,
-	$scrollLeft: true,
-	$scrollTop: true,
-	$scrollX: true,
-	$scrollY: true,
-	$self: true,
-	$webkitIndexedDB: true,
-	$webkitStorageInfo: true,
-	$window: true
-};
-var hasAutomationEqualityBug = (function () {
-	/* global window */
-	if (typeof window === 'undefined') { return false; }
-	for (var k in window) {
-		try {
-			if (!excludedKeys['$' + k] && has.call(window, k) && window[k] !== null && typeof window[k] === 'object') {
-				try {
-					equalsConstructorPrototype(window[k]);
-				} catch (e) {
-					return true;
-				}
-			}
-		} catch (e) {
-			return true;
-		}
-	}
-	return false;
-}());
-var equalsConstructorPrototypeIfNotBuggy = function (o) {
-	/* global window */
-	if (typeof window === 'undefined' || !hasAutomationEqualityBug) {
-		return equalsConstructorPrototype(o);
-	}
-	try {
-		return equalsConstructorPrototype(o);
-	} catch (e) {
-		return false;
-	}
-};
+var isArgs = __webpack_require__(24);
 
-var keysShim = function keys(object) {
-	var isObject = object !== null && typeof object === 'object';
-	var isFunction = toStr.call(object) === '[object Function]';
-	var isArguments = isArgs(object);
-	var isString = isObject && toStr.call(object) === '[object String]';
-	var theKeys = [];
+var origKeys = Object.keys;
+var keysShim = origKeys ? function keys(o) { return origKeys(o); } : __webpack_require__(41);
 
-	if (!isObject && !isFunction && !isArguments) {
-		throw new TypeError('Object.keys called on a non-object');
-	}
-
-	var skipProto = hasProtoEnumBug && isFunction;
-	if (isString && object.length > 0 && !has.call(object, 0)) {
-		for (var i = 0; i < object.length; ++i) {
-			theKeys.push(String(i));
-		}
-	}
-
-	if (isArguments && object.length > 0) {
-		for (var j = 0; j < object.length; ++j) {
-			theKeys.push(String(j));
-		}
-	} else {
-		for (var name in object) {
-			if (!(skipProto && name === 'prototype') && has.call(object, name)) {
-				theKeys.push(String(name));
-			}
-		}
-	}
-
-	if (hasDontEnumBug) {
-		var skipConstructor = equalsConstructorPrototypeIfNotBuggy(object);
-
-		for (var k = 0; k < dontEnums.length; ++k) {
-			if (!(skipConstructor && dontEnums[k] === 'constructor') && has.call(object, dontEnums[k])) {
-				theKeys.push(dontEnums[k]);
-			}
-		}
-	}
-	return theKeys;
-};
+var originalKeys = Object.keys;
 
 keysShim.shim = function shimObjectKeys() {
 	if (Object.keys) {
 		var keysWorksWithArguments = (function () {
 			// Safari 5.0 bug
-			return (Object.keys(arguments) || '').length === 2;
+			var args = Object.keys(arguments);
+			return args && args.length === arguments.length;
 		}(1, 2));
 		if (!keysWorksWithArguments) {
-			var originalKeys = Object.keys;
 			Object.keys = function keys(object) { // eslint-disable-line func-name-matching
 				if (isArgs(object)) {
 					return originalKeys(slice.call(object));
-				} else {
-					return originalKeys(object);
 				}
+				return originalKeys(object);
 			};
 		}
 	} else {
@@ -4328,31 +4452,136 @@ module.exports = keysShim;
 
 
 /***/ }),
-/* 49 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var toStr = Object.prototype.toString;
+var keysShim;
+if (!Object.keys) {
+	// modified from https://github.com/es-shims/es5-shim
+	var has = Object.prototype.hasOwnProperty;
+	var toStr = Object.prototype.toString;
+	var isArgs = __webpack_require__(24); // eslint-disable-line global-require
+	var isEnumerable = Object.prototype.propertyIsEnumerable;
+	var hasDontEnumBug = !isEnumerable.call({ toString: null }, 'toString');
+	var hasProtoEnumBug = isEnumerable.call(function () {}, 'prototype');
+	var dontEnums = [
+		'toString',
+		'toLocaleString',
+		'valueOf',
+		'hasOwnProperty',
+		'isPrototypeOf',
+		'propertyIsEnumerable',
+		'constructor'
+	];
+	var equalsConstructorPrototype = function (o) {
+		var ctor = o.constructor;
+		return ctor && ctor.prototype === o;
+	};
+	var excludedKeys = {
+		$applicationCache: true,
+		$console: true,
+		$external: true,
+		$frame: true,
+		$frameElement: true,
+		$frames: true,
+		$innerHeight: true,
+		$innerWidth: true,
+		$onmozfullscreenchange: true,
+		$onmozfullscreenerror: true,
+		$outerHeight: true,
+		$outerWidth: true,
+		$pageXOffset: true,
+		$pageYOffset: true,
+		$parent: true,
+		$scrollLeft: true,
+		$scrollTop: true,
+		$scrollX: true,
+		$scrollY: true,
+		$self: true,
+		$webkitIndexedDB: true,
+		$webkitStorageInfo: true,
+		$window: true
+	};
+	var hasAutomationEqualityBug = (function () {
+		/* global window */
+		if (typeof window === 'undefined') { return false; }
+		for (var k in window) {
+			try {
+				if (!excludedKeys['$' + k] && has.call(window, k) && window[k] !== null && typeof window[k] === 'object') {
+					try {
+						equalsConstructorPrototype(window[k]);
+					} catch (e) {
+						return true;
+					}
+				}
+			} catch (e) {
+				return true;
+			}
+		}
+		return false;
+	}());
+	var equalsConstructorPrototypeIfNotBuggy = function (o) {
+		/* global window */
+		if (typeof window === 'undefined' || !hasAutomationEqualityBug) {
+			return equalsConstructorPrototype(o);
+		}
+		try {
+			return equalsConstructorPrototype(o);
+		} catch (e) {
+			return false;
+		}
+	};
 
-module.exports = function isArguments(value) {
-	var str = toStr.call(value);
-	var isArgs = str === '[object Arguments]';
-	if (!isArgs) {
-		isArgs = str !== '[object Array]' &&
-			value !== null &&
-			typeof value === 'object' &&
-			typeof value.length === 'number' &&
-			value.length >= 0 &&
-			toStr.call(value.callee) === '[object Function]';
-	}
-	return isArgs;
-};
+	keysShim = function keys(object) {
+		var isObject = object !== null && typeof object === 'object';
+		var isFunction = toStr.call(object) === '[object Function]';
+		var isArguments = isArgs(object);
+		var isString = isObject && toStr.call(object) === '[object String]';
+		var theKeys = [];
+
+		if (!isObject && !isFunction && !isArguments) {
+			throw new TypeError('Object.keys called on a non-object');
+		}
+
+		var skipProto = hasProtoEnumBug && isFunction;
+		if (isString && object.length > 0 && !has.call(object, 0)) {
+			for (var i = 0; i < object.length; ++i) {
+				theKeys.push(String(i));
+			}
+		}
+
+		if (isArguments && object.length > 0) {
+			for (var j = 0; j < object.length; ++j) {
+				theKeys.push(String(j));
+			}
+		} else {
+			for (var name in object) {
+				if (!(skipProto && name === 'prototype') && has.call(object, name)) {
+					theKeys.push(String(name));
+				}
+			}
+		}
+
+		if (hasDontEnumBug) {
+			var skipConstructor = equalsConstructorPrototypeIfNotBuggy(object);
+
+			for (var k = 0; k < dontEnums.length; ++k) {
+				if (!(skipConstructor && dontEnums[k] === 'constructor') && has.call(object, dontEnums[k])) {
+					theKeys.push(dontEnums[k]);
+				}
+			}
+		}
+		return theKeys;
+	};
+}
+module.exports = keysShim;
 
 
 /***/ }),
-/* 50 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {var debug = __webpack_require__(14)('algoliasearch:src/hostIndexState.js');
@@ -4445,7 +4674,7 @@ function cleanup() {
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(5)))
 
 /***/ }),
-/* 51 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -4461,7 +4690,7 @@ exports.coerce = coerce;
 exports.disable = disable;
 exports.enable = enable;
 exports.enabled = enabled;
-exports.humanize = __webpack_require__(52);
+exports.humanize = __webpack_require__(44);
 
 /**
  * The currently active debug mode names, and names to skip.
@@ -4653,7 +4882,7 @@ function coerce(val) {
 
 
 /***/ }),
-/* 52 */
+/* 44 */
 /***/ (function(module, exports) {
 
 /**
@@ -4811,24 +5040,24 @@ function plural(ms, n, name) {
 
 
 /***/ }),
-/* 53 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var global = __webpack_require__(54);
-var Promise = global.Promise || __webpack_require__(55).Promise;
+var global = __webpack_require__(46);
+var Promise = global.Promise || __webpack_require__(47).Promise;
 
 // This is the standalone browser build entry point
 // Browser implementation of the Algolia Search JavaScript client,
 // using XMLHttpRequest, XDomainRequest and JSONP as fallback
 module.exports = function createAlgoliasearch(AlgoliaSearch, uaSuffix) {
-  var inherits = __webpack_require__(29);
+  var inherits = __webpack_require__(21);
   var errors = __webpack_require__(11);
-  var inlineHeaders = __webpack_require__(56);
-  var jsonpRequest = __webpack_require__(57);
-  var places = __webpack_require__(58);
+  var inlineHeaders = __webpack_require__(48);
+  var jsonpRequest = __webpack_require__(49);
+  var places = __webpack_require__(50);
   uaSuffix = uaSuffix || '';
 
   if (false) {}
@@ -4843,8 +5072,11 @@ module.exports = function createAlgoliasearch(AlgoliaSearch, uaSuffix) {
     return new AlgoliaSearchBrowser(applicationID, apiKey, opts);
   }
 
-  algoliasearch.version = __webpack_require__(61);
-  algoliasearch.ua = 'Algolia for vanilla JavaScript ' + uaSuffix + algoliasearch.version;
+  algoliasearch.version = __webpack_require__(53);
+
+  algoliasearch.ua =
+    'Algolia for JavaScript (' + algoliasearch.version + '); ' + uaSuffix;
+
   algoliasearch.initPlaces = places(algoliasearch);
 
   // we expose into window no matter how we are used, this will allow
@@ -5049,7 +5281,7 @@ module.exports = function createAlgoliasearch(AlgoliaSearch, uaSuffix) {
 
 
 /***/ }),
-/* 54 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {var win;
@@ -5069,7 +5301,7 @@ module.exports = win;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(5)))
 
 /***/ }),
-/* 55 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(process, global) {/*!
@@ -5077,7 +5309,7 @@ module.exports = win;
  * @copyright Copyright (c) 2014 Yehuda Katz, Tom Dale, Stefan Penner and contributors (Conversion to ES6 API by Jake Archibald)
  * @license   Licensed under MIT license
  *            See https://raw.githubusercontent.com/stefanpenner/es6-promise/master/LICENSE
- * @version   v4.2.5+7f2b526d
+ * @version   v4.2.8+1e68dce6
  */
 
 (function (global, factory) {
@@ -5307,23 +5539,12 @@ var PENDING = void 0;
 var FULFILLED = 1;
 var REJECTED = 2;
 
-var TRY_CATCH_ERROR = { error: null };
-
 function selfFulfillment() {
   return new TypeError("You cannot resolve a promise with itself");
 }
 
 function cannotReturnOwn() {
   return new TypeError('A promises callback cannot return that same promise.');
-}
-
-function getThen(promise) {
-  try {
-    return promise.then;
-  } catch (error) {
-    TRY_CATCH_ERROR.error = error;
-    return TRY_CATCH_ERROR;
-  }
 }
 
 function tryThen(then$$1, value, fulfillmentHandler, rejectionHandler) {
@@ -5381,10 +5602,7 @@ function handleMaybeThenable(promise, maybeThenable, then$$1) {
   if (maybeThenable.constructor === promise.constructor && then$$1 === then && maybeThenable.constructor.resolve === resolve$1) {
     handleOwnThenable(promise, maybeThenable);
   } else {
-    if (then$$1 === TRY_CATCH_ERROR) {
-      reject(promise, TRY_CATCH_ERROR.error);
-      TRY_CATCH_ERROR.error = null;
-    } else if (then$$1 === undefined) {
+    if (then$$1 === undefined) {
       fulfill(promise, maybeThenable);
     } else if (isFunction(then$$1)) {
       handleForeignThenable(promise, maybeThenable, then$$1);
@@ -5398,7 +5616,14 @@ function resolve(promise, value) {
   if (promise === value) {
     reject(promise, selfFulfillment());
   } else if (objectOrFunction(value)) {
-    handleMaybeThenable(promise, value, getThen(value));
+    var then$$1 = void 0;
+    try {
+      then$$1 = value.then;
+    } catch (error) {
+      reject(promise, error);
+      return;
+    }
+    handleMaybeThenable(promise, value, then$$1);
   } else {
     fulfill(promise, value);
   }
@@ -5477,31 +5702,18 @@ function publish(promise) {
   promise._subscribers.length = 0;
 }
 
-function tryCatch(callback, detail) {
-  try {
-    return callback(detail);
-  } catch (e) {
-    TRY_CATCH_ERROR.error = e;
-    return TRY_CATCH_ERROR;
-  }
-}
-
 function invokeCallback(settled, promise, callback, detail) {
   var hasCallback = isFunction(callback),
       value = void 0,
       error = void 0,
-      succeeded = void 0,
-      failed = void 0;
+      succeeded = true;
 
   if (hasCallback) {
-    value = tryCatch(callback, detail);
-
-    if (value === TRY_CATCH_ERROR) {
-      failed = true;
-      error = value.error;
-      value.error = null;
-    } else {
-      succeeded = true;
+    try {
+      value = callback(detail);
+    } catch (e) {
+      succeeded = false;
+      error = e;
     }
 
     if (promise === value) {
@@ -5510,14 +5722,13 @@ function invokeCallback(settled, promise, callback, detail) {
     }
   } else {
     value = detail;
-    succeeded = true;
   }
 
   if (promise._state !== PENDING) {
     // noop
   } else if (hasCallback && succeeded) {
     resolve(promise, value);
-  } else if (failed) {
+  } else if (succeeded === false) {
     reject(promise, error);
   } else if (settled === FULFILLED) {
     fulfill(promise, value);
@@ -5595,7 +5806,15 @@ var Enumerator = function () {
 
 
     if (resolve$$1 === resolve$1) {
-      var _then = getThen(entry);
+      var _then = void 0;
+      var error = void 0;
+      var didError = false;
+      try {
+        _then = entry.then;
+      } catch (e) {
+        didError = true;
+        error = e;
+      }
 
       if (_then === then && entry._state !== PENDING) {
         this._settledAt(entry._state, i, entry._result);
@@ -5604,7 +5823,11 @@ var Enumerator = function () {
         this._result[i] = entry;
       } else if (c === Promise$1) {
         var promise = new c(noop);
-        handleMaybeThenable(promise, entry, _then);
+        if (didError) {
+          reject(promise, error);
+        } else {
+          handleMaybeThenable(promise, entry, _then);
+        }
         this._willSettleAt(promise, i);
       } else {
         this._willSettleAt(new c(function (resolve$$1) {
@@ -6258,7 +6481,7 @@ return Promise$1;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(10), __webpack_require__(5)))
 
 /***/ }),
-/* 56 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6266,7 +6489,7 @@ return Promise$1;
 
 module.exports = inlineHeaders;
 
-var encode = __webpack_require__(32);
+var encode = __webpack_require__(25);
 
 function inlineHeaders(url, headers) {
   if (/\?/.test(url)) {
@@ -6280,7 +6503,7 @@ function inlineHeaders(url, headers) {
 
 
 /***/ }),
-/* 57 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6413,13 +6636,13 @@ function jsonpRequest(url, opts, cb) {
 
 
 /***/ }),
-/* 58 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = createPlacesClient;
 
-var qs3 = __webpack_require__(59);
-var buildSearchMethod = __webpack_require__(30);
+var qs3 = __webpack_require__(51);
+var buildSearchMethod = __webpack_require__(22);
 
 function createPlacesClient(algoliasearch) {
   return function places(appID, apiKey, opts) {
@@ -6468,18 +6691,18 @@ function createPlacesClient(algoliasearch) {
 
 
 /***/ }),
-/* 59 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-exports.decode = exports.parse = __webpack_require__(60);
-exports.encode = exports.stringify = __webpack_require__(32);
+exports.decode = exports.parse = __webpack_require__(52);
+exports.encode = exports.stringify = __webpack_require__(25);
 
 
 /***/ }),
-/* 60 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6570,24 +6793,24 @@ var isArray = Array.isArray || function (xs) {
 
 
 /***/ }),
-/* 61 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-module.exports = '3.31.0';
+module.exports = '3.35.1';
 
 
 /***/ }),
-/* 62 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 // this will inject Zepto in window, unfortunately no easy commonJS zepto build
-var zepto = __webpack_require__(63);
+var zepto = __webpack_require__(55);
 
 // setup DOM element
 var DOM = __webpack_require__(2);
@@ -6611,8 +6834,8 @@ _.mixin = zepto.extend;
 _.Event = zepto.Event;
 
 var typeaheadKey = 'aaAutocomplete';
-var Typeahead = __webpack_require__(64);
-var EventBus = __webpack_require__(33);
+var Typeahead = __webpack_require__(56);
+var EventBus = __webpack_require__(26);
 
 function autocomplete(selector, options, datasets, typeaheadObject) {
   datasets = _.isArray(datasets) ? datasets : [].slice.call(arguments, 2);
@@ -6637,7 +6860,8 @@ function autocomplete(selector, options, datasets, typeaheadObject) {
       datasets: datasets,
       keyboardShortcuts: options.keyboardShortcuts,
       appendTo: options.appendTo,
-      autoWidth: options.autoWidth
+      autoWidth: options.autoWidth,
+      ariaLabel: options.ariaLabel || input.getAttribute('aria-label')
     });
     $input.data(typeaheadKey, typeahead);
   });
@@ -6677,7 +6901,7 @@ module.exports = autocomplete;
 
 
 /***/ }),
-/* 63 */
+/* 55 */
 /***/ (function(module, exports) {
 
 /* istanbul ignore next */
@@ -7759,7 +7983,9 @@ module.exports = autocomplete;
         event[predicate] = returnFalse
       })
 
-      event.timeStamp || (event.timeStamp = Date.now())
+      try {
+        event.timeStamp || (event.timeStamp = Date.now())
+      } catch (ignored) { }
 
       if (source.defaultPrevented !== undefined ? source.defaultPrevented :
           'returnValue' in source ? source.returnValue === false :
@@ -8000,7 +8226,7 @@ module.exports = autocomplete;
 
 
 /***/ }),
-/* 64 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8010,11 +8236,11 @@ var attrsKey = 'aaAttrs';
 
 var _ = __webpack_require__(0);
 var DOM = __webpack_require__(2);
-var EventBus = __webpack_require__(33);
-var Input = __webpack_require__(65);
-var Dropdown = __webpack_require__(72);
-var html = __webpack_require__(34);
-var css = __webpack_require__(24);
+var EventBus = __webpack_require__(26);
+var Input = __webpack_require__(57);
+var Dropdown = __webpack_require__(64);
+var html = __webpack_require__(27);
+var css = __webpack_require__(17);
 
 // constructor
 // -----------
@@ -8655,13 +8881,13 @@ function destroyDomStructure($node, cssClasses) {
 
 Typeahead.Dropdown = Dropdown;
 Typeahead.Input = Input;
-Typeahead.sources = __webpack_require__(74);
+Typeahead.sources = __webpack_require__(66);
 
 module.exports = Typeahead;
 
 
 /***/ }),
-/* 65 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8681,7 +8907,7 @@ specialKeyCodeMap = {
 
 var _ = __webpack_require__(0);
 var DOM = __webpack_require__(2);
-var EventEmitter = __webpack_require__(23);
+var EventEmitter = __webpack_require__(16);
 
 // constructor
 // -----------
@@ -9009,17 +9235,17 @@ module.exports = Input;
 
 
 /***/ }),
-/* 66 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 var types = [
-  __webpack_require__(67),
-  __webpack_require__(68),
-  __webpack_require__(69),
-  __webpack_require__(70),
-  __webpack_require__(71)
+  __webpack_require__(59),
+  __webpack_require__(60),
+  __webpack_require__(61),
+  __webpack_require__(62),
+  __webpack_require__(63)
 ];
 var draining;
 var currentQueue;
@@ -9112,7 +9338,7 @@ function immediate(task) {
 
 
 /***/ }),
-/* 67 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9131,7 +9357,7 @@ exports.install = function (func) {
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(10)))
 
 /***/ }),
-/* 68 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9160,7 +9386,7 @@ exports.install = function (handle) {
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(5)))
 
 /***/ }),
-/* 69 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9185,7 +9411,7 @@ exports.install = function (func) {
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(5)))
 
 /***/ }),
-/* 70 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9216,7 +9442,7 @@ exports.install = function (handle) {
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(5)))
 
 /***/ }),
-/* 71 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9232,7 +9458,7 @@ exports.install = function (t) {
 };
 
 /***/ }),
-/* 72 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9240,9 +9466,9 @@ exports.install = function (t) {
 
 var _ = __webpack_require__(0);
 var DOM = __webpack_require__(2);
-var EventEmitter = __webpack_require__(23);
-var Dataset = __webpack_require__(73);
-var css = __webpack_require__(24);
+var EventEmitter = __webpack_require__(16);
+var Dataset = __webpack_require__(65);
+var css = __webpack_require__(17);
 
 // constructor
 // -----------
@@ -9633,7 +9859,7 @@ module.exports = Dropdown;
 
 
 /***/ }),
-/* 73 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9645,9 +9871,9 @@ var datumKey = 'aaDatum';
 
 var _ = __webpack_require__(0);
 var DOM = __webpack_require__(2);
-var html = __webpack_require__(34);
-var css = __webpack_require__(24);
-var EventEmitter = __webpack_require__(23);
+var html = __webpack_require__(27);
+var css = __webpack_require__(17);
+var EventEmitter = __webpack_require__(16);
 
 // constructor
 // -----------
@@ -9895,9 +10121,11 @@ _.mixin(Dataset.prototype, EventEmitter, {
   },
 
   clear: function clear() {
-    this.cancel();
-    this.$el.empty();
-    this.trigger('rendered', '');
+    if (this.$el) {
+      this.cancel();
+      this.$el.empty();
+      this.trigger('rendered', '');
+    }
   },
 
   isEmpty: function isEmpty() {
@@ -9945,28 +10173,28 @@ module.exports = Dataset;
 
 
 /***/ }),
-/* 74 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 module.exports = {
-  hits: __webpack_require__(75),
-  popularIn: __webpack_require__(76)
+  hits: __webpack_require__(67),
+  popularIn: __webpack_require__(68)
 };
 
 
 /***/ }),
-/* 75 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var _ = __webpack_require__(0);
-var version = __webpack_require__(35);
-var parseAlgoliaClientVersion = __webpack_require__(36);
+var version = __webpack_require__(28);
+var parseAlgoliaClientVersion = __webpack_require__(29);
 
 module.exports = function search(index, params) {
   var algoliaVersion = parseAlgoliaClientVersion(index.as._ua);
@@ -9989,15 +10217,15 @@ module.exports = function search(index, params) {
 
 
 /***/ }),
-/* 76 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var _ = __webpack_require__(0);
-var version = __webpack_require__(35);
-var parseAlgoliaClientVersion = __webpack_require__(36);
+var version = __webpack_require__(28);
+var parseAlgoliaClientVersion = __webpack_require__(29);
 
 module.exports = function popularIn(index, params, details, options) {
   var algoliaVersion = parseAlgoliaClientVersion(index.as._ua);
@@ -10081,9 +10309,10 @@ module.exports = function popularIn(index, params, details, options) {
 
 
 /***/ }),
-/* 77 */,
-/* 78 */,
-/* 79 */
+/* 69 */,
+/* 70 */,
+/* 71 */,
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // we need to export using commonjs for ease of usage in all
@@ -10092,19 +10321,22 @@ module.exports = function popularIn(index, params, details, options) {
 // https://github.com/webpack/webpack/issues/4039
 
 /* eslint-disable import/no-commonjs */
-var widget = __webpack_require__(80);
+var widget = __webpack_require__(73);
 
-module.exports = widget.default;
+module.exports = widget["default"];
+/* eslint-enable import/no-commonjs */
 
 /***/ }),
-/* 80 */
+/* 73 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return makeAlgoliaPlacesWidget; });
-/* harmony import */ var _places__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(41);
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+/* harmony import */ var _places__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(33);
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -10123,9 +10355,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
  * The underlying structure for the Algolia Places instantsearch widget.
  */
 
-var AlgoliaPlacesWidget =
-/*#__PURE__*/
-function () {
+var AlgoliaPlacesWidget = /*#__PURE__*/function () {
   function AlgoliaPlacesWidget() {
     var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
         defaultPosition = _ref.defaultPosition,
@@ -10225,7 +10455,8 @@ function () {
       }
 
       if (searchParameters.aroundLatLng === undefined && !this.query) {
-        var newUiState = Object.assign({}, uiState);
+        var newUiState = _objectSpread({}, uiState);
+
         delete newUiState.places;
         return newUiState;
       }

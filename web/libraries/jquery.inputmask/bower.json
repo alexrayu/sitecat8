@@ -1,6 +1,6 @@
 {
   "name": "inputmask",
-  "version": "4.0.4",
+  "version": "5.0.3",
   "main": [
 	  "./index.js",
     "./css/inputmask.css"
@@ -11,8 +11,11 @@
   "ignore": [
     "**/*",
     "!index.js",
+    "!bundle.js",
+    "!bundle.jquery.js",
     "!css/**/*",
-    "!dist/**/*"
+    "!dist/**/*",
+    "!lib/**/*"
   ],
   "dependencies": {
     "jquery": ">=1.7"

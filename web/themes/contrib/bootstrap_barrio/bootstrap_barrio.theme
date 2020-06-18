@@ -385,17 +385,19 @@ function bootstrap_barrio_preprocess_form_element(&$variables) {
   if (isset($variables['element']['#attributes'])) {
     $variables['input_attributes'] = new Attribute($variables['element']['#attributes']);
   }
-  switch ($variables['type']) {
-    case 'checkbox':
-      $variables['customtype'] = theme_get_setting('bootstrap_barrio_checkbox');
-      break;
+  if (isset($variables['type'])) {
+    switch ($variables['type']) {
+      case 'checkbox':
+        $variables['customtype'] = theme_get_setting('bootstrap_barrio_checkbox');
+        break;
 
-    case 'radio':
-      $variables['customtype'] = theme_get_setting('bootstrap_barrio_radio');
-      break;
+      case 'radio':
+        $variables['customtype'] = theme_get_setting('bootstrap_barrio_radio');
+        break;
 
-    default:
-      break;
+      default:
+        break;
+    }
   }
 }
 

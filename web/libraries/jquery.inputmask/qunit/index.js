@@ -1,21 +1,4 @@
-import "../node_modules/qunit/qunit/qunit.css";
-import "../css/inputmask.css";
-
-//extensions
-import "../js/inputmask.date.extensions";
-import "../js/inputmask.extensions";
-import "../js/inputmask.numeric.extensions";
-import "../js/jquery.inputmask";
-
-import Inputmask from "../js/inputmask";
-
-// import "../dist/inputmask/inputmask.date.extensions";
-// import "../dist/inputmask/inputmask.extensions";
-// import "../dist/inputmask/inputmask.numeric.extensions";
-// import "../dist/inputmask/jquery.inputmask";
-//
-// import Inputmask from "../dist/inputmask/inputmask";
-
+import Inputmask from "../bundle";
 import jQuery from "jquery";
 
 if (Inputmask.dependencyLib === jQuery)
@@ -31,7 +14,7 @@ Inputmask.extendDefaults({
     inputEventOnly: false
 });
 
-window.Inputmask = Inputmask; //inject globally for the simulator to detect inputeventonly
+// window.Inputmask = Inputmask; //inject globally for the simulator to detect inputeventonly
 
 import tests_alternations from "./tests_alternations";
 import tests_attributes from "./tests_attributes";

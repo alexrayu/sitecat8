@@ -33,7 +33,7 @@ regions:
   footer_fourth: 'Footer fourth'
   footer_fifth: 'Footer fifth'
 
-# Information added by Drupal.org packaging script on 2020-05-09
-version: '8.x-4.28'
+# Information added by Drupal.org packaging script on 2020-06-18
+version: '8.x-4.29'
 project: 'bootstrap_barrio'
-datestamp: 1589051364
+datestamp: 1592441779

@@ -7,6 +7,10 @@
 - integer
 - percentage
 
+The defaults are those defined in the base numeric alias.
+The currency alias and others are derived from the numeric alias and can have other defaults.
+Have a look in the inputmask.numeric.extensions.js for more details about which defaults are used. (At the end of the file)
+
 ## Options
 ### digits
 Number of fractionalDigits
@@ -21,60 +25,50 @@ Default: true
 
 ### enforceDigitsOnBlur 
 Enforces the decimal part when leaving the input field.
-
-### groupSize
-Define the grouping of the integer part.
-Default: 3
-
-### autoGroup
-Enable grouping of the integer part.
 Default: false
 
+### radixPoint
+default: "."
+
+### positionCaretOnClick
+Default: "radixFocus"
+		
+### groupSeparator
+Default: ""
+		
 ### allowMinus
-Allow to enter -.
+Allow to enter -.  
 Default: true
 
 ### negationSymbol
-Define your negationSymbol.
-Default: {
-  front: "-", //"("
-  back: "" //")"
+Define your negationSymbol.  
+Default: {  
+  front: "-", //"("  
+  back: "" //")"  
 }
 
-### integerDigits
-Number of integerDigits
-Default: "+"
-
-### integerOptional
-Specify wheter the integerdigits are optional.
-Default: true
-
 ### prefix
-Define a prefix.
+Define a prefix.  
 Default: ""
 
 ### suffix
-Define a suffix.
+Define a suffix.  
 Default: ""
 
-### decimalProtect
-Do not allow assumption of decimals input without entering the radixpoint.
-Default: true
-
 ### min
-Minimum value
+Minimum value  
 Default: undefined
 
 ### max
-Maximum value
+Maximum value  
 Default: undefined
 
 ### step
-Define the step the ctrl-up & ctrl-down must take.
+Define the step the ctrl-up & ctrl-down must take.  
 Default: 1
 
 ### unmaskAsNumber
-Make unmasking returning a number instead of a string.
+Make unmasking returning a number instead of a string.  
 Default: false
 
 Be warned that using the unmaskAsNumber option together with jQuery.serialize will fail as serialize expects a string. (See issue [#1288])
@@ -82,12 +76,26 @@ Be warned that using the unmaskAsNumber option together with jQuery.serialize wi
 
 [#1288]: https://github.com/RobinHerbots/jquery.inputmask/issues/1288
 
+### roundingFN
+Set the fn for rounding the values when set.  
+Default: Math.round
+
+Other examples:
+- Math.floor 
+- fn(x) { /* do your own rounding logic */ return x; }
+
+### shortcuts: 
+Default: {k: "000", m: "000000"}
+
+Define shortcuts. 
+This will allow typing 1k => 1000, 2m => 2000000
+ 
+To disable just pass shortcuts: null as option
 
 ### inputType
 Indicates whether the value passed for initialization is text or a number
 
 Default: "text"
-
 
 ### Setting initial values
 

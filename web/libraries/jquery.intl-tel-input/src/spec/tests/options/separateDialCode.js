@@ -24,7 +24,7 @@ describe("separateDialCode:", function() {
     });
 
     it("sets the classes properly", function() {
-      expect(getParentElement()).toHaveClass("separate-dial-code iti-sdc-3");
+      expect(getParentElement()).toHaveClass("iti--separate-dial-code");
     });
 
     it("displays the dial code next to the selected flag", function() {
@@ -93,14 +93,12 @@ describe("separateDialCode:", function() {
     });
 
     it("sets the placeholder correctly", function() {
-      // used to be '4-733-1234'
-      expect(input.attr("placeholder")).toEqual("733-1234");
+      expect(input.attr("placeholder")).toEqual("684-733-1234");
     });
 
     it("calling setNumber will set the number correctly", function() {
       iti.setNumber("+16847331234");
-      // used to be '4-733-1234'
-      expect(getInputVal()).toEqual("733-1234");
+      expect(getInputVal()).toEqual("684-733-1234");
     });
 
   });

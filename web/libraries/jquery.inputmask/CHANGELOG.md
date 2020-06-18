@@ -1,5 +1,102 @@
 # Change Log
 
+## [5.0.3 - 11/01/2020
+### Fixed
+- Pasted value is getting mixed up #2255
+- Swapped digits on paste with specific prefix #2256
+
+
+## [5.0.2 - 09/01/2020]
+### Added
+- <input-mask> html element #2247
+
+### Fixed
+- Numeric alias: cannot clear input on blur #2235
+- Datetime alias H3:MM month validation fails #2239
+
+## [5.0.1 - 18/12/2019]
+### Added
+- ssn mask
+
+### Updates
+- numeric aliases: set value with jQuery.val or native input.value =
+- numeric aliases: make min/max block input instead of setting the min/max value
+- jitMasking: autofill statics to improve the user experience
+
+### Fixed
+- Backspace not removing characters in some cases #2246
+- jitMasking and caret position with static characters #2243
+- datetime does not working in IE11 #2238
+
+## [5.0.0 - 02/12/2019]
+### Addition
+- add indian numbering support in numeric alias (indianns alias)
+- add roundingFN option to numeric alias.  (currency, decimal, ...)
+- input-inputmode support via inputmode option (if supported by browser)
+- add shortcuts option in numeric alias.
+- add insertModeVisual option
+
+### Updates
+- **postValidation**  
+    - add inputchar to arguments  
+    - also validate when the result is false**  
+- **change behavior of keepStatic option**
+    - multiple masks => default true  
+    - all other masks => default false
+- add more tokens for datetime format  
+- refactor inputfallbackevent
+- **drop colormask support** 
+- **drop disablePredictiveText option (was hack via colorMask)**  
+- ignore generated statics in revalidateMask
+- fix mask curruption when alternating and using jitmasking
+- Casing option will also allow case insensitive entry for static symbols  
+- **refactor numeric alias**
+- package & bundling
+- enhance regex alternations. ex: [01][0-9]|2[0-3] => ([01][0-9]|2[0-3])
+- extend command object  
+    - rewritePosition
+- revert insert-mode caret as selection instead of colored caret
+    - make delete/backspace behave like normal
+    - make visual optional
+
+### Fixed
+- Decimal - auto change comma to dot (numeric keyboard) #2098
+- If a decimal < 0.000001 (scale = 6), masked value incorrect. #2110
+- DateTime - HH:MM format doesn't accept some numbers for minutes #2209
+- Set currency prefix to empty by default #2066
+- NumericInput: Pasting integers without selecting results in extra 0s #2165
+- Wrong mask application on decimal field #2188
+- bootstrap-datepicker: date bug in mobile version #2195
+- Time 24 Hours Issue. #2194
+- 'Decimal'. New entered value is automatically prefixed with '.' #2189
+- inputmode not working #2193
+- Does not work on XHTML pages. #2187
+- isInputEventSupported method is creating a non-passive event #2185
+- No message with HTML5 validation #841
+- "setvalue" for empty value and "clearMaskOnLostFocus=false" duplicates mask suffix #2181
+- Uncaught TypeError: $(...).inputmask is not a function #1933
+- 12Hr Format time Hour error #2121
+- Backspace alters value/mask in datetime #2163
+- Suffix and white-space groupSeparator problem #813
+- Char before quantifier gets duplicated in tests #2152
+- FireFox - mask placeholder doesn't disappear #2138
+- im-insert not valid html #2122
+- No message with HTML5 validation #841
+- Manual input via virtual keyboard doesn't work #2116
+- Can't insert more than 2 letters in Firefox #2114
+- InputMask not getting fresh placeholder value #2111
+- Chrome autofill does not work with Inputmask #1330
+- Paste in inputmask #2088
+- The first character is truncated when masking. #2089
+- No leading zero for single-digit hours KO #2061
+- Only 1st placeholder is displayed for fields with same alias numeric #2060
+- Original placeholder disappear when mouseout in IE #2047
+- Document bug with disabled inputs caused by Firefox 64 and older #2045
+- Behaviour of v3 with hours not possible anymore #1918
+- Unmasked value of datetime alias, if empty, returns the placeholder #2039
+- ...
+
+
 ## [4.0.4 - 2018-12-03]
 ### Addition
 - add url as supported input type
