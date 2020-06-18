@@ -75,7 +75,7 @@ barrio_media:
   label: Media
   category: Barrio Media
   path: layouts
-  template: media
+  template: bootstrap-media
   default_region: second
   icon_map:
     - [first, second]

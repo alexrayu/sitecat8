@@ -34,6 +34,6 @@ regions:
   footer_fifth: 'Footer fifth'
 
 # Information added by Drupal.org packaging script on 2020-06-18
-version: '8.x-4.29'
+version: '8.x-4.30'
 project: 'bootstrap_barrio'
-datestamp: 1592441779
+datestamp: 1592500698
