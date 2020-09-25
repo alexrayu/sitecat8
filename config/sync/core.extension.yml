@@ -1,6 +1,5 @@
 module:
   admin_toolbar: 0
-  admin_toolbar_search: 0
   admin_toolbar_tools: 0
   adminimal_admin_toolbar: 0
   alibraries: 0
@@ -12,7 +11,6 @@ module:
   block_content: 0
   breakpoint: 0
   ckeditor: 0
-  color: 0
   config: 0
   contact: 0
   contact_storage: 0
@@ -46,6 +44,7 @@ module:
   layout_discovery: 0
   libraries: 0
   link: 0
+  mailsystem: 0
   masquerade: 0
   media: 0
   media_library: 0
@@ -57,7 +56,6 @@ module:
   page_cache: 0
   path: 0
   path_alias: 0
-  phpmailer: 0
   quickedit: 0
   rabbit_hole: 0
   rdf: 0
@@ -66,6 +64,7 @@ module:
   search_api_db: 0
   settings_tray: 0
   smart_trim: 0
+  smtp: 0
   syslog: 0
   system: 0
   taxonomy: 0
