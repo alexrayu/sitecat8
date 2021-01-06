@@ -1,0 +1,14 @@
+uuid: 4d6b9512-c568-4ef5-8ae4-60bdc1c7ed6f
+name: SiteCat
+mail: me@example.com
+slogan: ''
+page:
+  403: ''
+  404: ''
+  front: /node
+admin_compact_mode: false
+weight_select_max: 100
+langcode: en
+default_langcode: en
+_core:
+  default_config_hash: yTxtFqBHnEWxQswuWvkjE8mKw2t8oKuCL1q8KnfHuGE
