@@ -1,8 +1,0 @@
-name: 'Language Access Taxonomy'
-type: module
-description: 'My Awesome Module'
-core: 8.x
-package: 'Custom'
-dependencies:
-  - language_access
-  - language_access_fields

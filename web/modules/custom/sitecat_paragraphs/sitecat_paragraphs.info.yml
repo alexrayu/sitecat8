@@ -1,5 +1,0 @@
-name: SiteCat Paragraphs
-type: module
-description: Functionality for custom paragraphs.
-core: 8.x
-package: SiteCat

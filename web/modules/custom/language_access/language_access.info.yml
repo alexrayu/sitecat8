@@ -1,8 +1,0 @@
-name: Language access
-type: module
-description: Provides access permissions by language.
-core: 8.x
-package: Multilingual
-dependencies:
-  - localized_config
-  - locale

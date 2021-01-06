@@ -1,7 +1,0 @@
-name: 'Language Access Fields'
-type: module
-description: 'Provides a language filter option for entity reference fields.'
-core: 8.x
-package: 'Multilingual'
-dependencies:
-  - language_access

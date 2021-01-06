@@ -1,4 +1,0 @@
-services:
-  language_access_taxonomy.helper:
-    class: Drupal\language_access_taxonomy\LanguageAccessTaxonomyHelper
-    arguments: ['@language_manager', '@language_access.helper', '@plugin.manager.entity_reference_selection']

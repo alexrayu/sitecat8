@@ -1,7 +1,0 @@
-require:
-  - '@babel/register'
-  - './config/jsdom.js'
-
-exit: true
-
-spec: src/**/*.test.js

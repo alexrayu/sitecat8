@@ -1,8 +1,0 @@
-lib:
-  js:
-    assets/js/sitecat_paragraphs.js: { scope: footer, weight: -3 }
-  dependencies:
-  - core/jquery
-  - core/drupal
-  - core/underscore
-  - alibraries/youtube_api

@@ -1,3 +1,0 @@
-smtp_autotls: true
-smtp_keepalive: false
-smtp_timeout: 30
